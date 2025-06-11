@@ -1,5 +1,7 @@
 {
   "bracketSameLine": true,
   "singleQuote": true,
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "newline": "always",
+  "trailingComma": "all"
 }

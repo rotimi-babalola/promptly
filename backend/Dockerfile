@@ -1,15 +1,15 @@
-FROM python:3.13-slim
+# Base image
+FROM node:20
 
+# Set working directory
 WORKDIR /app
 
-# Update system packages to address vulnerabilities
-RUN apt-get update && apt-get upgrade -y && apt-get clean
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy files
+COPY package*.json ./
+RUN npm install
 
 COPY . .
 
-EXPOSE 8000
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Build and run
+RUN npm run build
+CMD ["node", "dist/main"]
