@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 
 export const Landing = () => {
@@ -7,6 +8,7 @@ export const Landing = () => {
     <div className="p-4">
       <h1 className="text-xl font-bold">{t('welcome')}</h1>
       <p className="mt-2">{t('homepage-description')}</p>
+      <Button>{t('get.started')}</Button>
     </div>
   );
 };

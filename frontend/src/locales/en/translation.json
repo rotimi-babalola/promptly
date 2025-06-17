@@ -1,4 +1,7 @@
 {
   "welcome": "Welcome to the Landing Page",
-  "homepage-description": "This is the landing page of our application."
+  "homepage-description": "This is the landing page of our application.",
+  "get": {
+    "started": "Get Started"
+  }
 }
