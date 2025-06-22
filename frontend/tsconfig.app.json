@@ -10,7 +10,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@auth/*": ["./src/pages/auth/*"],
-      "@landing/*": ["./src/pages/landing/*"]
+      "@landing/*": ["./src/pages/landing/*"],
+      "@dashboard/*": ["./src/pages/dashboard/*"]
     },
 
     /* Bundler mode */
