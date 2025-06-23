@@ -8,15 +8,24 @@ import { type AuthContextType } from './authTypes';
 const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
+  loading: true,
 });
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-    });
+    const initSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      setSession(session);
+      setLoading(false);
+    };
+
+    initSession();
 
     const {
       data: { subscription },
@@ -28,7 +37,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user: session?.user ?? null }}>
+    <AuthContext.Provider
+      value={{ session, user: session?.user ?? null, loading }}>
       {children}
     </AuthContext.Provider>
   );

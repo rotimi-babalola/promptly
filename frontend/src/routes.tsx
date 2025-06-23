@@ -1,20 +1,16 @@
 import { createBrowserRouter } from 'react-router';
 
-import { Login } from '@auth/Login';
-import { Signup } from '@auth/Signup';
+import { Login } from '@/pages/auth/Login';
 import { AuthCallback } from '@auth/callback';
 
 import { Landing } from '@landing/index';
 import { Dashboard } from '@dashboard/index';
+import { SessionGate } from '@/components/common/session-gate';
 
 export const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
-  },
-  {
-    path: '/signup',
-    element: <Signup />,
   },
   {
     path: '/',
@@ -26,6 +22,10 @@ export const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: (
+      <SessionGate>
+        <Dashboard />
+      </SessionGate>
+    ),
   },
 ]);

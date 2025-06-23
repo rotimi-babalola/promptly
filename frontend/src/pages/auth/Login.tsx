@@ -1,42 +1,44 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { supabase } from '@/supabase';
+import { AuthForm } from './components/auth-form';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    setLoading(true);
+
+    e.preventDefault();
+
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: 'http://localhost:5173/auth/callback',
+        shouldCreateUser: true,
+        // this could naviagte to a custom callback page
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
-    if (!error) setSent(true);
-    else alert('Error sending link: ' + error.message);
+
+    setLoading(false);
+
+    if (error) {
+      toast.error(`Error: ${error.message}`);
+    } else {
+      toast.success('Magic link sent!');
+    }
   };
 
   return (
-    <div className="p-4">
-      {sent ? (
-        <p>Check your email for the login link.</p>
-      ) : (
-        <div>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="border p-2 mr-2"
-          />
-          <button
-            onClick={handleLogin}
-            className="bg-blue-500 text-white px-4 py-2">
-            Send Magic Link
-          </button>
-        </div>
-      )}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <AuthForm
+        email={email}
+        setEmail={setEmail}
+        handleLogin={handleLogin}
+        loading={loading}
+      />
     </div>
   );
 };
