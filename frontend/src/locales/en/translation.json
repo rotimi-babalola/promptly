@@ -1,7 +1,17 @@
 {
   "welcome": "Welcome to the Landing Page",
   "homepage-description": "This is the landing page of our application.",
-  "get": {
-    "started": "Get Started"
+  "landing": {
+    "welcome": "Welcome to Promptly",
+    "description": "Promptly helps you practice speaking, writing, reading, and listening in the language of your choice—powered by AI.",
+    "getStarted": "Log in to start learning",
+    "subtitle-1": "Free to use during early access ✨",
+    "subtitle-2": "No tutors, no scheduling. Practice anytime, anywhere."
+  },
+  "login": {
+    "email-label": "Email",
+    "send-magic-link": "Send Magic Link",
+    "sending": "Sending...",
+    "privacy-policy": "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
   }
 }

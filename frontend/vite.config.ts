@@ -9,6 +9,7 @@ export default defineConfig({
       '@': '/src',
       '@auth': '/src/pages/auth',
       '@landing': '/src/pages/landing',
+      '@dashboard': '/src/pages/dashboard',
     },
   },
   plugins: [react(), tailwindcss()],
