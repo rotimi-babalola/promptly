@@ -13,5 +13,30 @@
     "send-magic-link": "Send Magic Link",
     "sending": "Sending...",
     "privacy-policy": "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+  },
+  "dashboard": {
+    "title": "Promptly Dashboard",
+    "logout": "Logout",
+    "selectLanguage": "Select Language",
+    "languageLabel": "Select your practice language:",
+    "languages": {
+      "german": "German"
+    },
+    "speaking": {
+      "title": "Speaking Practice",
+      "description": "Practice your speaking skills with AI-generated prompts."
+    },
+    "writing": {
+      "title": "Writing Practice",
+      "description": "Improve your writing with daily practice sessions."
+    },
+    "reading": {
+      "title": "Reading Practice",
+      "description": "Coming soon..."
+    },
+    "listening": {
+      "title": "Listening Practice",
+      "description": "Coming soon..."
+    }
   }
 }
