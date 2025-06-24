@@ -6,6 +6,7 @@ import { AuthForm } from './components/auth-form';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -28,17 +29,22 @@ export const Login = () => {
       toast.error(`Error: ${error.message}`);
     } else {
       toast.success('Magic link sent!');
+      setSent(true);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <AuthForm
-        email={email}
-        setEmail={setEmail}
-        handleLogin={handleLogin}
-        loading={loading}
-      />
+      {sent ? (
+        <p className="text-center">✅ Magic link sent! Check your inbox.</p>
+      ) : (
+        <AuthForm
+          email={email}
+          setEmail={setEmail}
+          handleLogin={handleLogin}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };
