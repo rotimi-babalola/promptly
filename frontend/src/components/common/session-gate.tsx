@@ -1,6 +1,8 @@
 import { Navigate } from 'react-router';
 import useAuth from '@/context/auth/useAuth';
 
+import { URLS } from '@/constants';
+
 export function SessionGate({ children }: { children: React.ReactNode }) {
   const { loading, user } = useAuth();
 
@@ -10,7 +12,7 @@ export function SessionGate({ children }: { children: React.ReactNode }) {
 
   // Optional: redirect unauthenticated users
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={URLS.login} replace />;
   }
 
   return <>{children}</>;

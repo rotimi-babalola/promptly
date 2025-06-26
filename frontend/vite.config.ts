@@ -10,6 +10,7 @@ export default defineConfig({
       '@auth': '/src/pages/auth',
       '@landing': '/src/pages/landing',
       '@dashboard': '/src/pages/dashboard',
+      '@speak': '/src/pages/speak',
     },
   },
   plugins: [react(), tailwindcss()],

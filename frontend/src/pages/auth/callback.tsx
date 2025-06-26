@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { supabase } from '@/supabase';
+import { URLS } from '@/constants';
 
 export const AuthCallback = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export const AuthCallback = () => {
         console.error('Auth callback error:', error.message);
       }
 
-      navigate('/dashboard');
+      navigate(URLS.dashboard);
     };
 
     handleAuth();

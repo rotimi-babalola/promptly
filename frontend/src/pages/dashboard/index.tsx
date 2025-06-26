@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -7,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useTranslation } from 'react-i18next';
+import { URLS } from '@/constants';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ export const Dashboard = () => {
         <h1 className="text-xl font-semibold text-gray-800">
           {t('dashboard.title')}
         </h1>
-        <Button variant="outline" onClick={() => navigate('/logout')}>
+        <Button variant="outline" onClick={() => navigate(URLS.logout)}>
           {t('dashboard.logout')}
         </Button>
       </header>
@@ -45,7 +47,7 @@ export const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div
             className="border rounded-xl p-6 hover:shadow-md transition cursor-pointer bg-white"
-            onClick={() => navigate('/practice/speaking')}>
+            onClick={() => navigate(URLS.speak)}>
             <h2 className="text-lg font-semibold mb-2">
               {t('dashboard.speaking.title')}
             </h2>
