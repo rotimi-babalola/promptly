@@ -1,19 +1,22 @@
 import clsx from 'clsx';
 
+import { getShuffledArray } from '@/lib/getShuffledArray';
+
 interface WaveformDisplayProps {
   isRecording: boolean;
 }
 
 export const WaveformDisplay = ({ isRecording }: WaveformDisplayProps) => {
+  const bars = getShuffledArray();
+
   return (
     <div className="flex items-end gap-1 h-10">
-      {Array.from({ length: 10 }).map((_, i) => (
+      {bars.map(num => (
         <span
-          key={i}
+          key={num}
           className={clsx(
             'w-1 bg-primary rounded-sm origin-bottom',
-            // `w-1 h-8 bg-primary rounded-sm origin-bottom animate-wave-${i % 5}`,
-            isRecording ? `animate-wave-${i % 5}` : 'h-8',
+            isRecording ? `animate-wave-${num % 5}` : 'h-8',
           )}
         />
       ))}
