@@ -5,33 +5,34 @@ interface SubmitButtonProps {
   blob: Blob | null;
   // TODO: fix this type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onFeedbackReceived: (feedback: any) => void;
+  // onFeedbackReceived: (feedback: any) => void;
   isSubmitting: boolean;
-  setIsSubmitting: (val: boolean) => void;
+  handleSubmit: () => void;
 }
 
 export const SubmitButton = ({
   blob,
-  onFeedbackReceived,
+  // onFeedbackReceived,
   isSubmitting,
-  setIsSubmitting,
+  // setIsSubmitting,
+  handleSubmit,
 }: SubmitButtonProps) => {
-  const handleSubmit = async () => {
-    if (!blob) return;
-    setIsSubmitting(true);
+  // const handleSubmit = async () => {
+  //   if (!blob) return;
+  //   setIsSubmitting(true);
 
-    const formData = new FormData();
-    formData.append('audio', blob);
+  //   const formData = new FormData();
+  //   formData.append('audio', blob);
 
-    const res = await fetch('/api/v1/speak', {
-      method: 'POST',
-      body: formData,
-    });
+  //   const res = await fetch('/api/v1/speak', {
+  //     method: 'POST',
+  //     body: formData,
+  //   });
 
-    const data = await res.json();
-    onFeedbackReceived(data.feedback);
-    setIsSubmitting(false);
-  };
+  //   const data = await res.json();
+  //   onFeedbackReceived(data.feedback);
+  //   setIsSubmitting(false);
+  // };
 
   return (
     <div className="text-center">

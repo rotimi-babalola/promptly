@@ -24,11 +24,20 @@ export class SpeakService {
     this.openai = new OpenAI({ apiKey });
   }
 
-  async processAudio(file: Express.Multer.File): Promise<{
+  async processAudio(
+    file: Express.Multer.File,
+    prompt: string,
+  ): Promise<{
     transcript: string;
     feedback: Feedback;
     tips: MessageContent | string | null;
   }> {
+    if (!file || !file.buffer) {
+      throw new Error(
+        'No file uploaded or file is missing buffer. Ensure you are using Multer.memoryStorage.',
+      );
+    }
+
     const tempDir = path.join(__dirname, '..', '..', 'temp');
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true });
@@ -51,7 +60,7 @@ export class SpeakService {
     });
     const transcript = transcriptionRes.text;
 
-    const feedback = await feedbackChain.invoke({ transcript });
+    const feedback = await feedbackChain.invoke({ transcript, prompt });
 
     let tips: MessageContent | string | null = null;
 

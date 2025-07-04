@@ -4,11 +4,13 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { SpeakService } from './speak.service';
 import { SupabaseAuthGuard } from '../auth/supabase-auth.guard';
+import { memoryStorage } from 'multer';
 
 @Controller('api/v1/speak')
 export class SpeakController {
@@ -16,9 +18,12 @@ export class SpeakController {
 
   @UseGuards(SupabaseAuthGuard)
   @Post()
-  @UseInterceptors(FileInterceptor('audio'))
-  async handleSpeech(@UploadedFile() file: Express.Multer.File) {
-    const feedback = await this.speakService.processAudio(file);
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  async handleSpeech(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() prompt: string,
+  ) {
+    const feedback = await this.speakService.processAudio(file, prompt);
     return { feedback };
   }
 }

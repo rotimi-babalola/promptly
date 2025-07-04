@@ -4,6 +4,6 @@ import { SpeakService } from './speak.service';
 
 @Module({
   controllers: [SpeakController],
-  providers: [SpeakService]
+  providers: [SpeakService],
 })
 export class SpeakModule {}
