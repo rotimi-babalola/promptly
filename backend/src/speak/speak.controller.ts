@@ -24,6 +24,6 @@ export class SpeakController {
     @Body() prompt: string,
   ) {
     const feedback = await this.speakService.processAudio(file, prompt);
-    return { feedback };
+    return feedback;
   }
 }

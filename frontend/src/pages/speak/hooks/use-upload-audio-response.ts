@@ -23,7 +23,7 @@ export const useUploadAudioResponse = () => {
     const response = await sendRequest('http://localhost:8000/api/v1/speak', {
       method: 'POST',
       body: formData,
-      isJSON: false, // We are sending FormData, so we don't want to stringify
+      isJSON: false,
       headers: {
         Authorization: `Bearer ${token}`,
       },

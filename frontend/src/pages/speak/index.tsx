@@ -10,9 +10,6 @@ import useUploadAudioResponse from './hooks/use-upload-audio-response';
 export const SpeakPage = () => {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 
-  // TODO: fix this type
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
   const { uploadAudioResponse, isUploading, data } = useUploadAudioResponse();
 
   const handleSubmit = async () => {
@@ -22,7 +19,6 @@ export const SpeakPage = () => {
       audioBlob,
       prompt: 'Talk about what you like to do in your free time',
     });
-    // setFeedback(data.feedback);
   };
 
   return (
@@ -32,11 +28,16 @@ export const SpeakPage = () => {
       {audioBlob && <AudioPlayback blob={audioBlob} />}
       <SubmitButton
         blob={audioBlob}
-        // onFeedbackReceived={setFeedback}
         isSubmitting={isUploading}
         handleSubmit={handleSubmit}
       />
-      {data?.feedback && <FeedbackSection feedback={data?.feedback} />}
+      {data?.feedback && (
+        <FeedbackSection
+          feedback={data?.feedback}
+          transcript={data?.transcript}
+          tips={data?.tips}
+        />
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ export const AuthCallback = () => {
     const handleAuth = async () => {
       const { error, data } = await supabase.auth.getSession();
       console.log('Auth callback data:', data);
+
       if (error) {
         console.error('Auth callback error:', error.message);
       }

@@ -1,31 +1,33 @@
 type FetchOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  body?: any;
-  headers?: {
-    [headerName: string]: string;
-  };
+  body?: BodyInit | Record<string, unknown>;
+  headers?: HeadersInit;
   isJSON?: boolean;
 };
 
 const sendRequest = async (url: string, options: FetchOptions = {}) => {
-  const { method, headers, isJSON = true, body } = options;
+  const { method = 'GET', headers, isJSON = true, body } = options;
 
-  const finalHeaders = { ...headers };
-  let finalBody = undefined;
+  const { finalBody, finalHeaders } = (() => {
+    if (body instanceof FormData || body instanceof Blob) {
+      return { finalBody: body, finalHeaders: new Headers(headers) };
+    }
 
-  if (body instanceof FormData) {
-    // Do NOT set Content-Type for FormData; browser will set it
-    finalBody = body;
-  } else if (body instanceof Blob) {
-    finalBody = body;
-  } else if (body && isJSON) {
-    finalHeaders['Content-Type'] = 'application/json; charset=utf-8';
-    finalBody = JSON.stringify(body);
-  }
+    if (body && isJSON) {
+      const newHeaders = new Headers(headers);
+      newHeaders.set('Content-Type', 'application/json; charset=utf-8');
+
+      return {
+        finalBody: JSON.stringify(body),
+        finalHeaders: newHeaders,
+      };
+    }
+
+    return { finalBody: undefined, finalHeaders: new Headers(headers) };
+  })();
 
   const response = await fetch(url, {
-    method: method || 'GET',
+    method,
     body: finalBody,
     headers: finalHeaders,
     credentials: 'include',

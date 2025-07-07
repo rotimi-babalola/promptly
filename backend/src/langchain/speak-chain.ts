@@ -21,6 +21,7 @@ export interface Feedback {
     comment: string;
     score: number;
   };
+  closingMessage: string;
 }
 
 // Instantiate the parser with the desired type.
@@ -44,7 +45,11 @@ Evaluate the response using the following criteria. Give feedback for each crite
 - vocabulary
 - pronunciation
 
-Encourage the user with a positive closing message.
+Include a "closingMessage" field as a string with a positive, encouraging message. Do NOT nest it in an object — just a plain string.
+
+Make sure to follow the structure exactly and do not include any additional text outside the JSON object.
+If you cannot evaluate a criterion, set the score to 0 and provide a comment explaining why
+
 
 {format_instructions}
 `,
