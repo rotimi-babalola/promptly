@@ -1,77 +1,75 @@
-import { Injectable } from '@nestjs/common';
-import * as fs from 'fs';
+import {
+  Injectable,
+  Inject,
+  Logger,
+  BadRequestException,
+  BadGatewayException,
+} from '@nestjs/common';
+import { createReadStream, promises as fs } from 'fs';
 import * as path from 'path';
+import { file as tmpFile } from 'tmp-promise';
 import OpenAI from 'openai';
-import { ConfigService } from '@nestjs/config/dist/config.service';
-
-import { Feedback, feedbackChain } from '../langchain/speak-chain';
-import { grammarTipChain } from 'src/langchain/grammar-tip-chain';
 import { MessageContent } from '@langchain/core/messages';
+
+import { feedbackChain, Feedback } from '../langchain/speak-chain';
+import { grammarTipChain } from 'src/langchain/grammar-tip-chain';
+
+export interface ProcessAudioResult {
+  transcript: string;
+  feedback: Feedback;
+  tips: MessageContent | null;
+}
 
 @Injectable()
 export class SpeakService {
-  private openai: OpenAI;
+  private readonly logger = new Logger(SpeakService.name);
 
-  constructor(private configService: ConfigService) {
-    const apiKey = this.configService.get<string>('OPENAI_API_KEY') || '';
-    if (!apiKey) {
-      throw new Error('Missing OPENAI_API_KEY');
-    }
-    this.openai = new OpenAI({ apiKey });
-  }
+  constructor(
+    @Inject('OPENAI_CLIENT')
+    private readonly openai: OpenAI,
+  ) {}
 
   async processAudio(
     file: Express.Multer.File,
     prompt: string,
-  ): Promise<{
-    transcript: string;
-    feedback: Feedback;
-    tips: MessageContent | string | null;
-  }> {
-    if (!file || !file.buffer) {
-      throw new Error(
-        'No file uploaded or file is missing buffer. Ensure you are using Multer.memoryStorage.',
+  ): Promise<ProcessAudioResult> {
+    if (!file.buffer) {
+      throw new BadRequestException(
+        'Audio file is required and must use memoryStorage',
       );
     }
 
-    const tempDir = path.join(__dirname, '..', '..', 'temp');
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
-    }
-
-    const buffer = file.buffer;
-    if (!buffer) {
-      throw new Error('File must be uploaded with Multer.memoryStorage');
-    }
-
-    const originalName = file.originalname;
-
-    const tempPath = path.join(tempDir, originalName);
-
-    fs.writeFileSync(tempPath, buffer);
-
-    const transcriptionRes = await this.openai.audio.transcriptions.create({
-      file: fs.createReadStream(tempPath),
-      model: 'whisper-1',
+    const { path: tempPath, cleanup } = await tmpFile({
+      postfix: path.extname(file.originalname),
     });
-    const transcript = transcriptionRes.text;
 
-    const feedback = await feedbackChain.invoke({ transcript, prompt });
+    const start = Date.now();
+    try {
+      await fs.writeFile(tempPath, file.buffer);
 
-    let tips: MessageContent | string | null = null;
+      const transcriptionRes = await this.openai.audio.transcriptions.create({
+        file: createReadStream(tempPath),
+        model: 'whisper-1',
+      });
+      const transcript = transcriptionRes.text;
 
-    // If grammar or vocab is weak, get tips
-    if (feedback.grammar.score < 4 || feedback.vocabulary.score < 4) {
-      const result = await grammarTipChain.invoke({ transcript });
-      tips = result.content;
+      const [feedback, tipResult] = await Promise.all([
+        feedbackChain.invoke({ transcript, prompt }),
+        grammarTipChain.invoke({ transcript }),
+      ]);
+
+      const tips =
+        feedback.grammar.score < 4 || feedback.vocabulary.score < 4
+          ? tipResult.content
+          : null;
+
+      return { transcript, feedback, tips };
+    } catch (err) {
+      this.logger.error(`processAudio failed for ${file.originalname}`, err);
+      throw new BadGatewayException('Failed processing audio');
+    } finally {
+      await cleanup();
+      this.logger.log(`processAudio completed in ${Date.now() - start}ms`);
     }
-
-    fs.unlinkSync(tempPath);
-
-    return {
-      transcript,
-      feedback,
-      tips: tips || null,
-    };
   }
 }

@@ -5,12 +5,18 @@ import {
   UseInterceptors,
   UseGuards,
   Body,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 
 import { SpeakService } from './speak.service';
 import { SupabaseAuthGuard } from '../auth/supabase-auth.guard';
-import { memoryStorage } from 'multer';
+import { SpeakRequestDto } from './dto/speak.dto';
+
+const MAX_FILE_SIZE = 15 * 1024 * 1024;
 
 @Controller('api/v1/speak')
 export class SpeakController {
@@ -20,10 +26,17 @@ export class SpeakController {
   @Post()
   @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   async handleSpeech(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() prompt: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: MAX_FILE_SIZE }),
+          new FileTypeValidator({ fileType: '.(webm)' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() body: SpeakRequestDto,
   ) {
-    const feedback = await this.speakService.processAudio(file, prompt);
-    return feedback;
+    return this.speakService.processAudio(file, body.prompt);
   }
 }
