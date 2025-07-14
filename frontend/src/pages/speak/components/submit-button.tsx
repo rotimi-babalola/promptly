@@ -20,7 +20,10 @@ export const SubmitButton = ({
 
   return (
     <div className="text-center">
-      <Button onClick={handleSubmit} disabled={!blob || isSubmitting}>
+      <Button
+        onClick={handleSubmit}
+        disabled={!blob || isSubmitting}
+        className="cursor-pointer">
         {isSubmitting ? (
           <Loader2 className="w-4 h-4 animate-spin mr-2" />
         ) : null}

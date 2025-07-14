@@ -1,20 +1,22 @@
-import { useRecorder } from '../../hooks/use-recorder';
-
 import { RecordButton } from './record-button';
 import { TimerDisplay } from './timer-display';
 import { WaveformDisplay } from './waveform-display';
 
 interface RecorderControlsProps {
-  onRecordingComplete: (blob: Blob) => void;
+  isDisabled?: boolean;
+  isRecording: boolean;
+  timer: number;
+  startRecording: () => void;
+  stopRecording: () => void;
 }
 
 export const RecorderControls = ({
-  onRecordingComplete,
+  isDisabled,
+  isRecording,
+  timer,
+  startRecording,
+  stopRecording,
 }: RecorderControlsProps) => {
-  const { isRecording, startRecording, stopRecording, timer } = useRecorder({
-    onRecordingComplete,
-  });
-
   return (
     <div className="flex flex-col items-center space-y-4">
       <WaveformDisplay isRecording={isRecording} />
@@ -23,6 +25,7 @@ export const RecorderControls = ({
         isRecording={isRecording}
         onStart={startRecording}
         onStop={stopRecording}
+        isDisabled={isDisabled}
       />
     </div>
   );

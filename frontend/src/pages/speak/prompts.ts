@@ -20,3 +20,6 @@ export const prompts = [
   'Explain how you stay healthy.',
   'Talk about something that makes you laugh.',
 ];
+
+export const getRandomPrompt = () =>
+  prompts[Math.floor(Math.random() * prompts.length)];

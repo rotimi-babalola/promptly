@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface UseRecorderOptions {
-  onRecordingComplete?: (blob: Blob) => void;
-}
+// interface UseRecorderOptions {
+//   onRecordingComplete?: (blob: Blob) => void;
+// }
 
-export function useRecorder({ onRecordingComplete }: UseRecorderOptions) {
+export function useRecorder() {
   const [isRecording, setIsRecording] = useState(false);
-  const [blob, setBlob] = useState<Blob | null>(null);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [timer, setTimer] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -41,8 +41,7 @@ export function useRecorder({ onRecordingComplete }: UseRecorderOptions) {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: 'audio/webm',
         });
-        setBlob(audioBlob);
-        onRecordingComplete?.(audioBlob);
+        setAudioBlob(audioBlob);
         stream.getTracks().forEach(track => track.stop());
       };
 
@@ -66,11 +65,26 @@ export function useRecorder({ onRecordingComplete }: UseRecorderOptions) {
     }
   };
 
+  const resetRecording = () => {
+    setIsRecording(false);
+    setAudioBlob(null);
+    setTimer(0);
+    audioChunksRef.current = [];
+    if (mediaRecorderRef.current?.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+    }
+  };
+
   return {
     isRecording,
-    blob,
+    audioBlob,
+    setAudioBlob,
     timer,
     startRecording,
     stopRecording,
+    resetRecording,
   };
 }

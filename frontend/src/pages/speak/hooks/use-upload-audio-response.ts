@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import sendRequest from '@/services/api';
 import { supabase } from '@/supabase';
@@ -61,11 +62,8 @@ export const useUploadAudioResponse = () => {
 
   const { mutate, isPending, data, isSuccess, reset } = useMutation({
     mutationFn: uploadAudioResponse,
-    onSuccess: data => {
-      console.log('Audio response uploaded successfully:', data);
-    },
-    onError: error => {
-      console.error('Error uploading audio response:', error);
+    onError: () => {
+      toast.error('Error uploading audio response. Please try again.');
     },
   });
 

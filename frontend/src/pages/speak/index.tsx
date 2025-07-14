@@ -8,14 +8,14 @@ import { FeedbackSection } from './components/feedback-section';
 import useUploadAudioResponse, {
   type UploadAudioResponseResult,
 } from './hooks/use-upload-audio-response';
-import { prompts } from './prompts';
-
-const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+import { getRandomPrompt } from './prompts';
+import { useRecorder } from './hooks/use-recorder';
 
 export const SpeakPage = () => {
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [feedbackData, setFeedbackData] =
     useState<UploadAudioResponseResult | null>(null);
+
+  const randomPrompt = getRandomPrompt();
 
   const {
     uploadAudioResponse,
@@ -24,6 +24,17 @@ export const SpeakPage = () => {
     isSuccess,
     resetUploadAudio,
   } = useUploadAudioResponse();
+
+  const {
+    isRecording,
+    startRecording,
+    stopRecording,
+    timer,
+    audioBlob,
+    resetRecording,
+  } = useRecorder();
+
+  const disableRecordButton = isUploading || isSuccess;
 
   const handleSubmit = async () => {
     if (!audioBlob) return;
@@ -41,15 +52,22 @@ export const SpeakPage = () => {
   }, [data]);
 
   const handleReset = () => {
-    setAudioBlob(null);
+    resetRecording();
     setFeedbackData(null);
     resetUploadAudio();
+    getRandomPrompt();
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
       <PromptDisplay prompt={randomPrompt} />
-      <RecorderControls onRecordingComplete={setAudioBlob} />
+      <RecorderControls
+        isDisabled={disableRecordButton}
+        isRecording={isRecording}
+        timer={timer}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
+      />
       {audioBlob && <AudioPlayback blob={audioBlob} />}
       <SubmitButton
         blob={audioBlob}
@@ -65,7 +83,7 @@ export const SpeakPage = () => {
             tips={feedbackData?.tips}
           />
           <button
-            className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
             onClick={handleReset}>
             Reset
           </button>
