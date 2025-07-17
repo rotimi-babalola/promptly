@@ -1,8 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 import sendRequest from '@/services/api';
 import { supabase } from '@/supabase';
+import type { RateLimitInfo } from '@/lib/parseRateLimitHeaders';
 
 type UploadAudioResponseParams = {
   audioBlob: Blob;
@@ -34,6 +36,10 @@ export type UploadAudioResponseResult = {
 };
 
 export const useUploadAudioResponse = () => {
+  const [rateLimitInfo, setRateLimitInfo] = useState<RateLimitInfo | null>(
+    null,
+  );
+
   const uploadAudioResponse = async ({
     audioBlob,
     prompt,
@@ -44,14 +50,19 @@ export const useUploadAudioResponse = () => {
 
     const token = (await supabase.auth.getSession()).data.session?.access_token;
 
-    const response = await sendRequest('http://localhost:8000/api/v1/speak', {
-      method: 'POST',
-      body: formData,
-      isJSON: false,
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const { response, rateLimitInfo: rateLimit } = await sendRequest(
+      'http://localhost:8000/api/v1/speak',
+      {
+        method: 'POST',
+        body: formData,
+        isJSON: false,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
+
+    setRateLimitInfo(rateLimit);
 
     if (!response.ok) {
       throw new Error('Failed to upload audio response');
@@ -73,6 +84,7 @@ export const useUploadAudioResponse = () => {
     data,
     isSuccess,
     resetUploadAudio: reset,
+    rateLimitInfo,
   };
 };
 

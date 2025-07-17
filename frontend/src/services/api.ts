@@ -1,3 +1,5 @@
+import { parseRateLimitHeaders } from '@/lib/parseRateLimitHeaders';
+
 type FetchOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   body?: BodyInit | Record<string, unknown>;
@@ -33,7 +35,11 @@ const sendRequest = async (url: string, options: FetchOptions = {}) => {
     credentials: 'include',
   });
 
-  return response;
+  const rateLimitInfo = parseRateLimitHeaders(response.headers);
+
+  console.log('Rate Limit Info:', { rateLimitInfo, response });
+
+  return { response, rateLimitInfo };
 };
 
 export default sendRequest;

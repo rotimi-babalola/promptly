@@ -23,6 +23,12 @@ async function bootstrap() {
     origin: 'http://localhost:5173',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
+    exposedHeaders: [
+      'x-ratelimit-limit',
+      'x-ratelimit-remaining',
+      'x-ratelimit-reset',
+      'retry-after',
+    ],
   });
 
   await app.listen(process.env.PORT ?? 8000);

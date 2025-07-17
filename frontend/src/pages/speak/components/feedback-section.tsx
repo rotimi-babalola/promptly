@@ -1,3 +1,6 @@
+import { formatDistanceToNow } from 'date-fns';
+import type { RateLimitInfo } from '@/lib/parseRateLimitHeaders';
+
 interface CategoryFeedback {
   score: number;
   comment: string;
@@ -16,6 +19,7 @@ interface FeedbackSectionProps {
   feedback: Feedback;
   transcript: string;
   tips?: string | null;
+  rateLimitInfo?: RateLimitInfo | null;
 }
 
 const categories = [
@@ -28,11 +32,25 @@ const categories = [
 export const FeedbackSection = ({
   feedback,
   transcript,
+  rateLimitInfo = null,
   tips = null,
 }: FeedbackSectionProps) => {
   return (
     <div className="mt-6 space-y-3 border-t pt-4">
       <h2 className="font-semibold text-lg">AI Feedback</h2>
+
+      {rateLimitInfo && (
+        <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
+          <p>
+            Requests remaining: {rateLimitInfo.remaining}/{rateLimitInfo.limit}
+          </p>
+          {rateLimitInfo.reset && (
+            <p>
+              Resets in: {formatDistanceToNow(new Date(rateLimitInfo.reset))}
+            </p>
+          )}
+        </div>
+      )}
       <div className="bg-muted p-3 rounded text-sm">
         <span className="font-semibold">Transcript:</span> {transcript}
       </div>

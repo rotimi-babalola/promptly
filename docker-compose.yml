@@ -1,10 +1,20 @@
 version: "3.9"
 
 services:
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
   backend:
     build: ./backend
     ports:
       - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
     volumes:
       - ./backend:/app
     command: npm run start:dev

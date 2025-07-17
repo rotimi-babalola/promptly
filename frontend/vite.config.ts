@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -14,6 +14,11 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['src/tests/vitest-setup.ts'],
+    globals: true,
+  },
   server: {
     proxy: {
       '/api': {
@@ -22,4 +27,4 @@ export default defineConfig({
       },
     },
   },
-});
+} as UserConfig);

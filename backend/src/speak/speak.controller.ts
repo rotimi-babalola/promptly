@@ -10,7 +10,10 @@ import {
   FileTypeValidator,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Throttle } from '@nestjs/throttler/dist/throttler.decorator';
 import { memoryStorage } from 'multer';
+
+import { MAX_REQUESTS_PER_DAY, THROTTLE_TTL } from 'src/app.module';
 
 import { SpeakService } from './speak.service';
 import { SupabaseAuthGuard } from '../auth/supabase-auth.guard';
@@ -23,6 +26,7 @@ export class SpeakController {
   constructor(private readonly speakService: SpeakService) {}
 
   @UseGuards(SupabaseAuthGuard)
+  @Throttle({ default: { limit: MAX_REQUESTS_PER_DAY, ttl: THROTTLE_TTL } })
   @Post()
   @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   async handleSpeech(
