@@ -11,8 +11,10 @@ import { file as tmpFile } from 'tmp-promise';
 import OpenAI from 'openai';
 import { MessageContent } from '@langchain/core/messages';
 
-import { feedbackChain, Feedback } from '../langchain/speak-chain';
 import { grammarTipChain } from 'src/langchain/grammar-tip-chain';
+
+import { feedbackChain, Feedback } from '../langchain/speak-chain';
+import { LanguageLevel } from './dto/speak.dto';
 
 export interface ProcessAudioResult {
   transcript: string;
@@ -32,6 +34,7 @@ export class SpeakService {
   async processAudio(
     file: Express.Multer.File,
     prompt: string,
+    languageLevel: LanguageLevel,
   ): Promise<ProcessAudioResult> {
     if (!file.buffer) {
       throw new BadRequestException(
@@ -54,7 +57,7 @@ export class SpeakService {
       const transcript = transcriptionRes.text;
 
       const [feedback, tipResult] = await Promise.all([
-        feedbackChain.invoke({ transcript, prompt }),
+        feedbackChain.invoke({ transcript, prompt, languageLevel }),
         grammarTipChain.invoke({ transcript }),
       ]);
 

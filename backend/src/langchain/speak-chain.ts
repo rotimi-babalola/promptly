@@ -28,7 +28,7 @@ export interface Feedback {
 const parser = new JsonOutputParser<Feedback>();
 
 const feedbackPrompt = new PromptTemplate({
-  inputVariables: ['transcript', 'prompt'],
+  inputVariables: ['transcript', 'prompt', 'languageLevel'],
 
   template: `
 You are an expert German language teacher evaluating a student's spoken response to a prompt. Your response MUST be a JSON object, and only a JSON object.
@@ -39,7 +39,10 @@ Transcript:
 Prompt:
 "{prompt}"
 
-Evaluate the response using the following criteria. Give feedback for each criterion in the JSON object. Each feedback should include a comment and a score from 1 to 10, where 1 is poor and 10 is excellent.:
+Language Level:
+"{languageLevel}"
+
+Evaluate the response using the following criteria. Give feedback for each criterion in the JSON object based on how well the student met the expectations for their language level. Each feedback should include a comment and a score from 1 to 10, where 1 is poor and 10 is excellent.:
 - fluency
 - grammar
 - vocabulary

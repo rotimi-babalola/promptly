@@ -1,4 +1,11 @@
 import { useEffect, useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 import { PromptDisplay } from './components/prompt-display';
 import { RecorderControls } from './components/recorder-controls';
@@ -15,11 +22,13 @@ import { getRandomPrompt } from './prompts';
 
 const randomPrompt = getRandomPrompt();
 
+export type LanguageLevel = 'beginner' | 'intermediate' | 'native';
+
 export const SpeakPage = () => {
   const [feedbackData, setFeedbackData] =
     useState<UploadAudioResponseResult | null>(null);
-
   const [prompt, setPrompt] = useState(randomPrompt);
+  const [languageLevel, setLanguageLevel] = useState<LanguageLevel>('beginner');
 
   const {
     uploadAudioResponse,
@@ -41,12 +50,17 @@ export const SpeakPage = () => {
 
   const disableRecordButton = isUploading || isSuccess;
 
+  const handleLanguageLevelChange = (value: LanguageLevel) => {
+    setLanguageLevel(value);
+  };
+
   const handleSubmit = async () => {
     if (!audioBlob) return;
 
     uploadAudioResponse({
       audioBlob,
       prompt,
+      languageLevel,
     });
   };
 
@@ -65,7 +79,22 @@ export const SpeakPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
-      <PromptDisplay prompt={prompt} />
+      <div className="flex flex-col gap-8 justify-between items-center">
+        <PromptDisplay prompt={prompt} />
+        <Select
+          value={languageLevel}
+          onValueChange={handleLanguageLevelChange}
+          disabled={disableRecordButton}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select level" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="beginner">Beginner</SelectItem>
+            <SelectItem value="intermediate">Intermediate</SelectItem>
+            <SelectItem value="expert">Expert</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <RecorderControls
         isDisabled={disableRecordButton}
         isRecording={isRecording}

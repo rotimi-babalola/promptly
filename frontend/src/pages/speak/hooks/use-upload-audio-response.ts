@@ -1,14 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { supabase } from '@/supabase';
 
 import sendRequest from '@/services/api';
-import { supabase } from '@/supabase';
 import type { RateLimitInfo } from '@/lib/parseRateLimitHeaders';
+
+import type { LanguageLevel } from '..';
 
 type UploadAudioResponseParams = {
   audioBlob: Blob;
   prompt: string;
+  languageLevel: LanguageLevel;
 };
 
 export type UploadAudioResponseResult = {
@@ -43,10 +46,12 @@ export const useUploadAudioResponse = () => {
   const uploadAudioResponse = async ({
     audioBlob,
     prompt,
+    languageLevel,
   }: UploadAudioResponseParams): Promise<UploadAudioResponseResult> => {
     const formData = new FormData();
     formData.append('file', audioBlob, 'response.wav');
     formData.append('prompt', prompt);
+    formData.append('languageLevel', languageLevel);
 
     const token = (await supabase.auth.getSession()).data.session?.access_token;
 

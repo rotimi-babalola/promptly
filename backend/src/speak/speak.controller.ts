@@ -41,6 +41,10 @@ export class SpeakController {
     file: Express.Multer.File,
     @Body() body: SpeakRequestDto,
   ) {
-    return this.speakService.processAudio(file, body.prompt);
+    return this.speakService.processAudio(
+      file,
+      body.prompt,
+      body.languageLevel,
+    );
   }
 }
