@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { ChevronLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   Select,
   SelectContent,
@@ -28,6 +29,7 @@ export type LanguageLevel = 'beginner' | 'intermediate' | 'native';
 
 export const SpeakPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const {
     feedbackData,
@@ -89,7 +91,7 @@ export const SpeakPage = () => {
           onClick={() => navigate(URLS.dashboard)}
           className="mb-4">
           <ChevronLeft />
-          Back to Dashboard
+          {t('speak.navigation.backToDashboard')}
         </Button>
       </div>
       <div className="flex flex-col gap-8 justify-between items-center">
@@ -99,12 +101,18 @@ export const SpeakPage = () => {
           onValueChange={handleLanguageLevelChange}
           disabled={disableRecordButton}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select level" />
+            <SelectValue placeholder={t('speak.languageLevel.label')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="beginner">Beginner</SelectItem>
-            <SelectItem value="intermediate">Intermediate</SelectItem>
-            <SelectItem value="expert">Expert</SelectItem>
+            <SelectItem value="beginner">
+              {t('speak.languageLevel.options.beginner')}
+            </SelectItem>
+            <SelectItem value="intermediate">
+              {t('speak.languageLevel.options.intermediate')}
+            </SelectItem>
+            <SelectItem value="expert">
+              {t('speak.languageLevel.options.expert')}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -133,7 +141,7 @@ export const SpeakPage = () => {
           <button
             className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
             onClick={handleReset}>
-            Reset
+            {t('common.actions.reset')}
           </button>
         </>
       )}

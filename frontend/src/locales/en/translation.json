@@ -39,7 +39,52 @@
       "description": "Coming soon..."
     }
   },
+  "common": {
+    "actions": {
+      "submit": "Submit",
+      "reset": "Reset",
+      "back": "Back"
+    },
+    "loading": {
+      "submitting": "Submitting...",
+      "sending": "Sending..."
+    },
+    "auth": {
+      "sendMagicLink": "Send Magic Link"
+    }
+  },
   "speak": {
-    "title": "Speak in German"
+    "title": "Speak in German",
+    "navigation": {
+      "backToDashboard": "Back to Dashboard"
+    },
+    "languageLevel": {
+      "label": "Select level",
+      "options": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "expert": "Expert"
+      }
+    },
+    "audioPlayback": {
+      "title": "Playback"
+    },
+    "feedback": {
+      "title": "AI Feedback",
+      "rateLimits": {
+        "remaining": "Requests remaining: {{remaining}}/{{limit}}",
+        "resetsIn": "Resets in: {{time}}"
+      },
+      "transcript": {
+        "label": "Transcript:"
+      },
+      "categories": {
+        "fluency": "Fluency",
+        "grammar": "Grammar",
+        "vocabulary": "Vocabulary",
+        "pronunciation": "Pronunciation",
+        "score": "{{score}}/10"
+      }
+    }
   }
 }

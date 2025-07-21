@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 
@@ -14,6 +15,8 @@ export const SubmitButton = ({
   handleSubmit,
   isSubmitted,
 }: SubmitButtonProps) => {
+  const { t } = useTranslation();
+
   if (isSubmitted) {
     return null;
   }
@@ -25,9 +28,13 @@ export const SubmitButton = ({
         disabled={!blob || isSubmitting}
         className="cursor-pointer">
         {isSubmitting ? (
-          <Loader2 className="w-4 h-4 animate-spin mr-2" />
-        ) : null}
-        Submit
+          <>
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            {t('common.loading.submitting')}
+          </>
+        ) : (
+          t('common.actions.submit')
+        )}
       </Button>
     </div>
   );

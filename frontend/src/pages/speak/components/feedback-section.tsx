@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import type { RateLimitInfo } from '@/lib/parseRateLimitHeaders';
 
 interface CategoryFeedback {
@@ -35,32 +36,42 @@ export const FeedbackSection = ({
   rateLimitInfo = null,
   tips = null,
 }: FeedbackSectionProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="mt-6 space-y-3 border-t pt-4">
-      <h2 className="font-semibold text-lg">AI Feedback</h2>
+      <h2 className="font-semibold text-lg">{t('speak.feedback.title')}</h2>
 
       {rateLimitInfo && (
         <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
           <p>
-            Requests remaining: {rateLimitInfo.remaining}/{rateLimitInfo.limit}
+            {t('speak.feedback.rateLimits.remaining', {
+              remaining: rateLimitInfo.remaining,
+              limit: rateLimitInfo.limit,
+            })}
           </p>
           {rateLimitInfo.reset && (
             <p>
-              Resets in: {formatDistanceToNow(new Date(rateLimitInfo.reset))}
+              {t('speak.feedback.rateLimits.resetsIn', {
+                time: formatDistanceToNow(new Date(rateLimitInfo.reset)),
+              })}
             </p>
           )}
         </div>
       )}
       <div className="bg-muted p-3 rounded text-sm">
-        <span className="font-semibold">Transcript:</span> {transcript}
+        <span className="font-semibold">
+          {t('speak.feedback.transcript.label')}
+        </span>{' '}
+        {transcript}
       </div>
       <ul className="grid grid-cols-2 gap-2">
         {categories.map(category => (
           <li key={category} className="text-sm">
-            <strong>
-              {category.charAt(0).toUpperCase() + category.slice(1)}:
-            </strong>{' '}
-            {feedback[category].score}/10
+            <strong>{t(`speak.feedback.categories.${category}`)}:</strong>{' '}
+            {t('speak.feedback.categories.score', {
+              score: feedback[category].score,
+            })}
             <div className="text-muted-foreground text-xs mt-1">
               {feedback[category].comment}
             </div>
