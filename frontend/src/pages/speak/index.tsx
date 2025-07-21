@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { ChevronLeft } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -6,6 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+
+import { URLS } from '@/constants';
 
 import { PromptDisplay } from './components/prompt-display';
 import { RecorderControls } from './components/recorder-controls';
@@ -13,22 +18,25 @@ import { AudioPlayback } from './components/audio-playback';
 import { SubmitButton } from './components/submit-button';
 import { FeedbackSection } from './components/feedback-section';
 
-import useUploadAudioResponse, {
-  type UploadAudioResponseResult,
-} from './hooks/use-upload-audio-response';
+import useUploadAudioResponse from './hooks/use-upload-audio-response';
 import { useRecorder } from './hooks/use-recorder';
 
 import { getRandomPrompt } from './prompts';
-
-const randomPrompt = getRandomPrompt();
+import { useSpeakPage } from './hooks/use-speak-page';
 
 export type LanguageLevel = 'beginner' | 'intermediate' | 'native';
 
 export const SpeakPage = () => {
-  const [feedbackData, setFeedbackData] =
-    useState<UploadAudioResponseResult | null>(null);
-  const [prompt, setPrompt] = useState(randomPrompt);
-  const [languageLevel, setLanguageLevel] = useState<LanguageLevel>('beginner');
+  const navigate = useNavigate();
+
+  const {
+    feedbackData,
+    prompt,
+    languageLevel,
+    handleLanguageLevelChange,
+    setFeedbackData,
+    setPrompt,
+  } = useSpeakPage();
 
   const {
     uploadAudioResponse,
@@ -50,10 +58,6 @@ export const SpeakPage = () => {
 
   const disableRecordButton = isUploading || isSuccess;
 
-  const handleLanguageLevelChange = (value: LanguageLevel) => {
-    setLanguageLevel(value);
-  };
-
   const handleSubmit = async () => {
     if (!audioBlob) return;
 
@@ -68,7 +72,7 @@ export const SpeakPage = () => {
     if (data?.feedback) {
       setFeedbackData(data);
     }
-  }, [data]);
+  }, [data, setFeedbackData]);
 
   const handleReset = () => {
     resetRecording();
@@ -79,6 +83,15 @@ export const SpeakPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
+      <div className="w-full">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(URLS.dashboard)}
+          className="mb-4">
+          <ChevronLeft />
+          Back to Dashboard
+        </Button>
+      </div>
       <div className="flex flex-col gap-8 justify-between items-center">
         <PromptDisplay prompt={prompt} />
         <Select
