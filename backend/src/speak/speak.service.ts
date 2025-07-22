@@ -11,8 +11,7 @@ import { file as tmpFile } from 'tmp-promise';
 import OpenAI from 'openai';
 import { MessageContent } from '@langchain/core/messages';
 
-import { grammarTipChain } from 'src/langchain/grammar-tip-chain';
-
+import { grammarTipChain } from '../langchain/grammar-tip-chain';
 import { feedbackChain, Feedback } from '../langchain/speak-chain';
 import { LanguageLevel } from './dto/speak.dto';
 
@@ -50,10 +49,12 @@ export class SpeakService {
     try {
       await fs.writeFile(tempPath, file.buffer);
 
+      const readStream = createReadStream(tempPath);
       const transcriptionRes = await this.openai.audio.transcriptions.create({
-        file: createReadStream(tempPath),
+        file: readStream,
         model: 'whisper-1',
       });
+      readStream.destroy();
       const transcript = transcriptionRes.text;
 
       const [feedback, tipResult] = await Promise.all([
