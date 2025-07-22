@@ -26,7 +26,8 @@ export const SubmitButton = ({
       <Button
         onClick={handleSubmit}
         disabled={!blob || isSubmitting}
-        className="cursor-pointer">
+        className="cursor-pointer"
+        data-testid="speak-submit-button">
         {isSubmitting ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin mr-2" />

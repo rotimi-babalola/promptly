@@ -67,7 +67,8 @@
       }
     },
     "audioPlayback": {
-      "title": "Playback"
+      "title": "Playback",
+      "noAudio": "No audio recorded yet."
     },
     "feedback": {
       "title": "AI Feedback",

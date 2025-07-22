@@ -19,7 +19,7 @@ import { AudioPlayback } from './components/audio-playback';
 import { SubmitButton } from './components/submit-button';
 import { FeedbackSection } from './components/feedback-section';
 
-import useUploadAudioResponse from './hooks/use-upload-audio-response';
+import { useUploadAudioResponse } from './hooks/use-upload-audio-response';
 import { useRecorder } from './hooks/use-recorder';
 
 import { getRandomPrompt } from './prompts';
@@ -55,6 +55,7 @@ export const SpeakPage = () => {
     stopRecording,
     timer,
     audioBlob,
+    audioUrl,
     resetRecording,
   } = useRecorder();
 
@@ -77,6 +78,7 @@ export const SpeakPage = () => {
   }, [data, setFeedbackData]);
 
   const handleReset = () => {
+    console.log('Resetting state');
     resetRecording();
     setFeedbackData(null);
     resetUploadAudio();
@@ -123,7 +125,7 @@ export const SpeakPage = () => {
         startRecording={startRecording}
         stopRecording={stopRecording}
       />
-      {audioBlob && <AudioPlayback blob={audioBlob} />}
+      {audioUrl && <AudioPlayback audioUrl={audioUrl} />}
       <SubmitButton
         blob={audioBlob}
         isSubmitting={isUploading}
@@ -140,7 +142,8 @@ export const SpeakPage = () => {
           />
           <button
             className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-            onClick={handleReset}>
+            onClick={handleReset}
+            data-testid="reset-button">
             {t('common.actions.reset')}
           </button>
         </>

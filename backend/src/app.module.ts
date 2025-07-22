@@ -13,7 +13,7 @@ import { SpeakModule } from './speak/speak.module';
 import { SupabaseAuthGuard } from './auth/supabase-auth.guard';
 import { UserThrottlerGuard } from './auth/user-throttler.guard';
 
-export const MAX_REQUESTS_PER_DAY = 50;
+export const MAX_REQUESTS_PER_DAY = 10;
 export const THROTTLE_TTL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 @Module({

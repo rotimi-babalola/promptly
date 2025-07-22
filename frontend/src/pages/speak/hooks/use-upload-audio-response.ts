@@ -92,5 +92,3 @@ export const useUploadAudioResponse = () => {
     rateLimitInfo,
   };
 };
-
-export default useUploadAudioResponse;

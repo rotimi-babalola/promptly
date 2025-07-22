@@ -2,57 +2,84 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { SpeakPage } from './index';
 
-// Mock all imported components
-vi.mock('./components/prompt-display', () => ({
-  PromptDisplay: () => <div data-testid="prompt-display">Mock Prompt</div>,
+vi.mock('react-router', () => ({
+  useNavigate: () => vi.fn(),
 }));
 
-vi.mock('./components/recorder-controls', () => ({
-  RecorderControls: () => (
-    <div data-testid="recorder-controls">Mock Controls</div>
-  ),
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
-vi.mock('./components/audio-playback', () => ({
-  AudioPlayback: () => <div data-testid="audio-playback">Mock Audio</div>,
-}));
-
-vi.mock('./components/submit-button', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  SubmitButton: (props: any) => (
-    <button data-testid="submit-button" onClick={props.handleSubmit}>
-      Submit
-    </button>
-  ),
-}));
-
-vi.mock('./components/feedback-section', () => ({
-  FeedbackSection: () => (
-    <div data-testid="feedback-section">Mock Feedback</div>
-  ),
-}));
-
-// Mock hooks
+// Mock hooks and data
+const mockResetRecording = vi.fn();
+const mockResetUploadAudio = vi.fn();
 const mockUploadAudioResponse = vi.fn();
+const mockStartRecording = vi.fn();
+const mockStopRecording = vi.fn();
+const mockAudioBlob = new Blob(['mock audio'], { type: 'audio/webm' });
+
+const mockData = {
+  feedback: {
+    fluency: {
+      comment:
+        "Your speech flows naturally with only minor hesitations. You're able to express yourself with good rhythm.",
+      score: 8,
+    },
+    grammar: {
+      comment:
+        'Good control of basic grammar structures. Some mistakes with complex tenses but meaning remains clear.',
+      score: 7,
+    },
+    vocabulary: {
+      comment:
+        'You use a good range of everyday vocabulary appropriately. Consider expanding your use of idiomatic expressions.',
+      score: 7,
+    },
+    pronunciation: {
+      comment:
+        "Clear pronunciation with good intonation. A few sound issues with 'th' and 'r' sounds.",
+      score: 8,
+    },
+    closingMessage:
+      "Overall, you're communicating effectively! Keep practicing to build more confidence.",
+  },
+  transcript: 'Test transcript',
+  tips: ['Tip 1'],
+};
+
+vi.mock('./hooks/use-recorder', () => ({
+  useRecorder: () => ({
+    isRecording: false,
+    startRecording: mockStartRecording,
+    stopRecording: mockStopRecording,
+    timer: '00:00',
+    audioUrl: 'mock-audio-url',
+    audioBlob: mockAudioBlob,
+    resetRecording: mockResetRecording,
+  }),
+}));
+
+vi.mock('./hooks/use-speak-page', () => ({
+  useSpeakPage: () => ({
+    feedbackData: null,
+    prompt: 'Mock prompt',
+    languageLevel: 'beginner',
+    handleLanguageLevelChange: vi.fn(),
+    setFeedbackData: vi.fn(),
+    setPrompt: vi.fn(),
+  }),
+}));
+
 vi.mock('./hooks/use-upload-audio-response', () => ({
-  default: () => ({
+  useUploadAudioResponse: () => ({
     uploadAudioResponse: mockUploadAudioResponse,
     isUploading: false,
     data: null,
     isSuccess: false,
-    resetUploadAudio: vi.fn(),
-  }),
-}));
-
-const mockAudioBlob = new Blob(['mock audio'], { type: 'audio/webm' });
-vi.mock('./hooks/use-recorder', () => ({
-  useRecorder: () => ({
-    isRecording: false,
-    startRecording: vi.fn(),
-    stopRecording: vi.fn(),
-    timer: '00:00',
-    audioBlob: mockAudioBlob,
-    resetRecording: vi.fn(),
+    resetUploadAudio: mockResetUploadAudio,
+    rateLimitInfo: null,
   }),
 }));
 
@@ -69,10 +96,10 @@ describe('SpeakPage', () => {
     render(<SpeakPage />);
     expect(screen.getByTestId('prompt-display')).toBeInTheDocument();
     expect(screen.getByTestId('recorder-controls')).toBeInTheDocument();
-    expect(screen.getByTestId('submit-button')).toBeInTheDocument();
+    expect(screen.getByTestId('speak-submit-button')).toBeInTheDocument();
   });
 
-  it('displays audio playback when audioBlob exists', () => {
+  it('displays audio playback when audioUrl exists', () => {
     render(<SpeakPage />);
     expect(screen.getByTestId('audio-playback')).toBeInTheDocument();
   });
@@ -80,31 +107,27 @@ describe('SpeakPage', () => {
   it('handles submit when audio blob exists', async () => {
     render(<SpeakPage />);
 
-    const submitButton = screen.getByTestId('submit-button');
+    const submitButton = screen.getByTestId('speak-submit-button');
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockUploadAudioResponse).toHaveBeenCalledWith({
         audioBlob: mockAudioBlob,
         prompt: 'Mock prompt',
+        languageLevel: 'beginner',
       });
     });
   });
 
   it('shows feedback section when feedback data exists', async () => {
-    const mockData = {
-      feedback: 'Test feedback',
-      transcript: 'Test transcript',
-      tips: ['Tip 1'],
-    };
-
-    vi.mock('./hooks/use-upload-audio-response', () => ({
-      default: () => ({
-        uploadAudioResponse: mockUploadAudioResponse,
-        isUploading: false,
-        data: mockData,
-        isSuccess: true,
-        resetUploadAudio: vi.fn(),
+    vi.mock('./hooks/use-speak-page', () => ({
+      useSpeakPage: () => ({
+        feedbackData: mockData,
+        prompt: 'Mock prompt',
+        languageLevel: 'beginner',
+        handleLanguageLevelChange: vi.fn(),
+        setFeedbackData: vi.fn(),
+        setPrompt: vi.fn(),
       }),
     }));
 
@@ -115,30 +138,24 @@ describe('SpeakPage', () => {
     });
   });
 
-  it('resets the page when reset button is clicked', async () => {
-    const mockData = {
-      feedback: 'Test feedback',
-      transcript: 'Test transcript',
-      tips: ['Tip 1'],
-    };
-
-    vi.mock('./hooks/use-upload-audio-response', () => ({
-      default: () => ({
-        uploadAudioResponse: mockUploadAudioResponse,
-        isUploading: false,
-        data: mockData,
-        isSuccess: true,
-        resetUploadAudio: vi.fn(),
+  it('handles reset functionality correctly', async () => {
+    vi.mock('./hooks/use-speak-page', () => ({
+      useSpeakPage: () => ({
+        feedbackData: mockData,
+        prompt: 'Mock prompt',
+        languageLevel: 'beginner',
+        handleLanguageLevelChange: vi.fn(),
+        setFeedbackData: vi.fn(),
+        setPrompt: vi.fn(),
       }),
     }));
 
     render(<SpeakPage />);
 
-    const resetButton = screen.getByRole('button', { name: /reset/i });
+    const resetButton = screen.getByTestId('reset-button');
     fireEvent.click(resetButton);
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('feedback-section')).not.toBeInTheDocument();
-    });
+    expect(mockResetRecording).toHaveBeenCalled();
+    expect(mockResetUploadAudio).toHaveBeenCalled();
   });
 });

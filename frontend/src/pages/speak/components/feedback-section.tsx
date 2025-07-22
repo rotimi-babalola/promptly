@@ -39,7 +39,9 @@ export const FeedbackSection = ({
   const { t } = useTranslation();
 
   return (
-    <div className="mt-6 space-y-3 border-t pt-4">
+    <div
+      className="mt-6 space-y-3 border-t pt-4"
+      data-testid="feedback-section">
       <h2 className="font-semibold text-lg">{t('speak.feedback.title')}</h2>
 
       {rateLimitInfo && (

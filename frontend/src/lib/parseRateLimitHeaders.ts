@@ -9,8 +9,6 @@ export const parseRateLimitHeaders = (headers: Headers): RateLimitInfo => {
   const limit = headers.get('X-Ratelimit-Limit');
   const reset = headers.get('X-Ratelimit-Reset');
 
-  console.log('Rate Limit Info:', { limit, remaining, reset });
-
   const retryAfter = headers.get('Retry-After');
 
   let resetDate = null;

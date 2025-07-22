@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-// interface UseRecorderOptions {
-//   onRecordingComplete?: (blob: Blob) => void;
-// }
-
 export function useRecorder() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [timer, setTimer] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -42,6 +39,7 @@ export function useRecorder() {
           type: 'audio/webm',
         });
         setAudioBlob(audioBlob);
+        setAudioUrl(URL.createObjectURL(audioBlob));
         stream.getTracks().forEach(track => track.stop());
       };
 
@@ -82,6 +80,7 @@ export function useRecorder() {
     isRecording,
     audioBlob,
     setAudioBlob,
+    audioUrl,
     timer,
     startRecording,
     stopRecording,

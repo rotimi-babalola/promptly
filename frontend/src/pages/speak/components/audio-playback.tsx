@@ -1,17 +1,24 @@
 import { useTranslation } from 'react-i18next';
 
 interface AudioPlaybackProps {
-  blob: Blob;
+  audioUrl: string | null;
 }
 
-export const AudioPlayback = ({ blob }: AudioPlaybackProps) => {
+export const AudioPlayback = ({ audioUrl }: AudioPlaybackProps) => {
   const { t } = useTranslation();
-  const url = URL.createObjectURL(blob);
+
+  if (!audioUrl) {
+    return (
+      <p className="text-muted-foreground">
+        {t('speak.audioPlayback.noAudio')}
+      </p>
+    );
+  }
 
   return (
-    <div className="text-center">
+    <div className="text-center" data-testid="audio-playback">
       <p className="font-medium">{t('speak.audioPlayback.title')}</p>
-      <audio controls src={url} className="w-full mt-2" />
+      <audio controls src={audioUrl} className="w-full mt-2" />
     </div>
   );
 };

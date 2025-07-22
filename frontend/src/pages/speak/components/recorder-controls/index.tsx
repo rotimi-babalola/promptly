@@ -18,7 +18,9 @@ export const RecorderControls = ({
   stopRecording,
 }: RecorderControlsProps) => {
   return (
-    <div className="flex flex-col items-center space-y-4">
+    <div
+      className="flex flex-col items-center space-y-4"
+      data-testid="recorder-controls">
       <WaveformDisplay isRecording={isRecording} />
       <TimerDisplay seconds={timer} />
       <RecordButton

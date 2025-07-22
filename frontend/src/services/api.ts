@@ -37,8 +37,6 @@ const sendRequest = async (url: string, options: FetchOptions = {}) => {
 
   const rateLimitInfo = parseRateLimitHeaders(response.headers);
 
-  console.log('Rate Limit Info:', { rateLimitInfo, response });
-
   return { response, rateLimitInfo };
 };
 
