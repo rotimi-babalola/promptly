@@ -13,7 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Throttle } from '@nestjs/throttler/dist/throttler.decorator';
 import { memoryStorage } from 'multer';
 
-import { MAX_REQUESTS_PER_DAY, THROTTLE_TTL } from 'src/app.module';
+import { MAX_REQUESTS_PER_DAY, THROTTLE_TTL } from '../app.module';
 
 import { SpeakService } from './speak.service';
 import { SupabaseAuthGuard } from '../auth/supabase-auth.guard';
