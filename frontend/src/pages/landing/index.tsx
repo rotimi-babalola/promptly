@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { Button } from '@/components/ui/button';
+import { URLS } from '@/constants';
 
 export const Landing = () => {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ export const Landing = () => {
       </p>
       <Button
         className="text-lg px-8 py-4 rounded-full cursor-pointer"
-        onClick={() => navigate('/login')}>
+        onClick={() => navigate(URLS.login)}>
         {t('landing.getStarted')}
       </Button>
 

@@ -1,13 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
 import { supabase } from '@/supabase';
+import { useNavigate } from 'react-router';
+
+import useAuth from '@/context/auth/useAuth';
+import { URLS } from '@/constants';
+
 import { AuthForm } from './components/auth-form';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && !authLoading) {
+      navigate(URLS.dashboard);
+    }
+  }, [authLoading, user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     setLoading(true);
@@ -18,7 +31,6 @@ export const Login = () => {
       email,
       options: {
         shouldCreateUser: true,
-        // this could naviagte to a custom callback page
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });

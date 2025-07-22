@@ -63,7 +63,9 @@ export const AuthForm = ({ email, handleLogin, setEmail, loading }: Props) => {
               />
             </svg>
           )}
-          {loading ? t('login.sending') : t('login.send-magic-link')}
+          {loading
+            ? t('common.loading.sending')
+            : t('common.auth.sendMagicLink')}
         </Button>
       </form>
 

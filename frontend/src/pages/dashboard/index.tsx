@@ -1,4 +1,7 @@
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -7,11 +10,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useTranslation } from 'react-i18next';
+import { URLS } from '@/constants';
+import { supabase } from '@/supabase';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error('Error logging out');
+    } else {
+      navigate(URLS.login);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -19,7 +32,7 @@ export const Dashboard = () => {
         <h1 className="text-xl font-semibold text-gray-800">
           {t('dashboard.title')}
         </h1>
-        <Button variant="outline" onClick={() => navigate('/logout')}>
+        <Button variant="outline" onClick={handleLogout}>
           {t('dashboard.logout')}
         </Button>
       </header>
@@ -41,11 +54,10 @@ export const Dashboard = () => {
           </Select>
         </div>
 
-        {/* Practice Options */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div
             className="border rounded-xl p-6 hover:shadow-md transition cursor-pointer bg-white"
-            onClick={() => navigate('/practice/speaking')}>
+            onClick={() => navigate(URLS.speak)}>
             <h2 className="text-lg font-semibold mb-2">
               {t('dashboard.speaking.title')}
             </h2>
