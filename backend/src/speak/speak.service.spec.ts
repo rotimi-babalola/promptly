@@ -102,8 +102,13 @@ describe('SpeakService', () => {
     (mockOpenAI.audio.transcriptions.create as jest.Mock).mockRejectedValue(
       new Error('fail'),
     );
-    await expect(service.processAudio(mockFile, prompt, level)).rejects.toThrow(
-      BadGatewayException,
-    );
+    try {
+      await service.processAudio(mockFile, prompt, level);
+      fail('Expected BadGatewayException to be thrown');
+    } catch (error) {
+      console.log('Caught error:', error);
+      expect(error.name).toBe('BadGatewayException');
+      expect(error.message).toBe('Failed processing audio');
+    }
   });
 });
