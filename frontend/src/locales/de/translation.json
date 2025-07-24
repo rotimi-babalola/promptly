@@ -1,4 +1,37 @@
 {
   "welcome": "Willkommen",
-  "homepage-description": "Dies ist die Startseite unserer Anwendung."
+  "homepage-description": "Dies ist die Startseite unserer Anwendung.",
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die Seite, die Sie suchen, wurde möglicherweise entfernt, umbenannt oder ist vorübergehend nicht verfügbar."
+  },
+  "common": {
+    "navigation": {
+      "backToDashboard": "Zurück zum Dashboard"
+    }
+  },
+  "write": {
+    "title": "Auf Deutsch schreiben",
+    "form": {
+      "placeholder": "Schreiben Sie hier Ihre Antwort...",
+      "wordCount": "Wörter: {{count}}",
+      "clear": "Löschen",
+      "submit": "Zur Überprüfung einreichen",
+      "submitting": "Überprüfung läuft..."
+    },
+    "validation": {
+      "minimumWords": "Bitte schreiben Sie mindestens 5 Wörter, bevor Sie einreichen."
+    },
+    "corrections": {
+      "title": "Korrekturen:",
+      "originalText": "Ihr ursprünglicher Text",
+      "correctedText": "KI-korrigierter Text",
+      "changesHighlighted": "Änderungen hervorgehoben",
+      "legend": {
+        "title": "Legende:",
+        "removed": "Text, der korrigiert oder entfernt wurde",
+        "added": "Text, der hinzugefügt oder korrigiert wurde"
+      }
+    }
+  }
 }

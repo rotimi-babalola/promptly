@@ -1,6 +1,10 @@
 {
   "welcome": "Welcome to the Landing Page",
   "homepage-description": "This is the landing page of our application.",
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
+  },
   "landing": {
     "welcome": "Welcome to Promptly",
     "description": "Promptly helps you practice speaking, writing, reading, and listening in the language of your choice—powered by AI.",
@@ -51,13 +55,13 @@
     },
     "auth": {
       "sendMagicLink": "Send Magic Link"
+    },
+    "navigation": {
+      "backToDashboard": "Back to Dashboard"
     }
   },
   "speak": {
     "title": "Speak in German",
-    "navigation": {
-      "backToDashboard": "Back to Dashboard"
-    },
     "languageLevel": {
       "label": "Select level",
       "options": {
@@ -85,6 +89,30 @@
         "vocabulary": "Vocabulary",
         "pronunciation": "Pronunciation",
         "score": "{{score}}/10"
+      }
+    }
+  },
+  "write": {
+    "title": "Write in German",
+    "form": {
+      "placeholder": "Write your response here...",
+      "wordCount": "Words: {{count}}",
+      "clear": "Clear",
+      "submit": "Submit for Feedback",
+      "submitting": "Checking..."
+    },
+    "validation": {
+      "minimumWords": "Please write at least 5 words before submitting."
+    },
+    "corrections": {
+      "title": "Corrections:",
+      "originalText": "Your Original Text",
+      "correctedText": "AI Corrected Text",
+      "changesHighlighted": "Changes Highlighted",
+      "legend": {
+        "title": "Legend:",
+        "removed": "Text that was corrected or removed",
+        "added": "Text that was added or corrected"
       }
     }
   }

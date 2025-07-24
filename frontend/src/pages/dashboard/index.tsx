@@ -68,7 +68,7 @@ export const Dashboard = () => {
 
           <div
             className="border rounded-xl p-6 hover:shadow-md transition cursor-pointer bg-white"
-            onClick={() => navigate('/practice/writing')}>
+            onClick={() => navigate(URLS.write)}>
             <h2 className="text-lg font-semibold mb-2">
               {t('dashboard.writing.title')}
             </h2>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { UploadAudioResponseResult } from './use-upload-audio-response';
-import { getRandomPrompt } from '../prompts';
+import { getRandomPrompt } from '@/services/prompts';
 
 export type LanguageLevel = 'beginner' | 'intermediate' | 'native';
 

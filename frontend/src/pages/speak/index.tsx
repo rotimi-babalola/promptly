@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { URLS } from '@/constants';
+import { getRandomPrompt } from '@/services/prompts';
 
 import { PromptDisplay } from './components/prompt-display';
 import { RecorderControls } from './components/recorder-controls';
@@ -21,8 +22,6 @@ import { FeedbackSection } from './components/feedback-section';
 
 import { useUploadAudioResponse } from './hooks/use-upload-audio-response';
 import { useRecorder } from './hooks/use-recorder';
-
-import { getRandomPrompt } from './prompts';
 import { useSpeakPage } from './hooks/use-speak-page';
 
 export type LanguageLevel = 'beginner' | 'intermediate' | 'native';
@@ -78,7 +77,6 @@ export const SpeakPage = () => {
   }, [data, setFeedbackData]);
 
   const handleReset = () => {
-    console.log('Resetting state');
     resetRecording();
     setFeedbackData(null);
     resetUploadAudio();
@@ -93,7 +91,7 @@ export const SpeakPage = () => {
           onClick={() => navigate(URLS.dashboard)}
           className="mb-4">
           <ChevronLeft />
-          {t('speak.navigation.backToDashboard')}
+          {t('common.navigation.backToDashboard')}
         </Button>
       </div>
       <div className="flex flex-col gap-8 justify-between items-center">
