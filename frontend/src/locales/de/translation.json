@@ -58,18 +58,18 @@
     },
     "navigation": {
       "backToDashboard": "Zurück zum Dashboard"
+    },
+    "languageLevel": {
+      "label": "Sprachniveau",
+      "options": {
+        "beginner": "Anfänger",
+        "intermediate": "Fortgeschritten",
+        "native": "Muttersprachlich"
+      }
     }
   },
   "speak": {
     "title": "Auf Deutsch sprechen",
-    "languageLevel": {
-      "label": "Level auswählen",
-      "options": {
-        "beginner": "Anfänger",
-        "intermediate": "Fortgeschritten",
-        "expert": "Experte"
-      }
-    },
     "audioPlayback": {
       "title": "Wiedergabe",
       "noAudio": "Noch keine Aufnahme vorhanden."
@@ -113,6 +113,20 @@
         "title": "Legende:",
         "removed": "Text, der korrigiert oder entfernt wurde",
         "added": "Text, der hinzugefügt oder korrigiert wurde"
+      }
+    },
+    "feedback": {
+      "title": "KI-Feedback",
+      "categories": {
+        "grammar": "Grammatik",
+        "vocabulary": "Wortschatz",
+        "structure": "Struktur"
+      },
+      "improvements": {
+        "title": "Verbesserungstipps"
+      },
+      "tips": {
+        "title": "Zusätzliche Grammatiktipps"
       }
     }
   }

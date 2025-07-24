@@ -58,18 +58,18 @@
     },
     "navigation": {
       "backToDashboard": "Back to Dashboard"
+    },
+    "languageLevel": {
+      "label": "Language Level",
+      "options": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "native": "Native"
+      }
     }
   },
   "speak": {
     "title": "Speak in German",
-    "languageLevel": {
-      "label": "Select level",
-      "options": {
-        "beginner": "Beginner",
-        "intermediate": "Intermediate",
-        "expert": "Expert"
-      }
-    },
     "audioPlayback": {
       "title": "Playback",
       "noAudio": "No audio recorded yet."
@@ -113,6 +113,20 @@
         "title": "Legend:",
         "removed": "Text that was corrected or removed",
         "added": "Text that was added or corrected"
+      }
+    },
+    "feedback": {
+      "title": "AI Feedback",
+      "categories": {
+        "grammar": "Grammar",
+        "vocabulary": "Vocabulary",
+        "structure": "Structure"
+      },
+      "improvements": {
+        "title": "Tips for Improvement"
+      },
+      "tips": {
+        "title": "Additional Grammar Tips"
       }
     }
   }

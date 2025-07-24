@@ -3,9 +3,17 @@ import { ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { URLS } from '@/constants';
 
 import { InlineDiff } from './components/inline-diff';
+import { WriteFeedbackSection } from './components/write-feedback-section';
 import { useWritePage } from './hooks/use-write-page';
 
 export const WritePage = () => {
@@ -21,7 +29,14 @@ export const WritePage = () => {
     wordCount,
     handleSubmit,
     handleClear,
+    languageLevel,
+    handleLanguageLevelChange,
+    data,
+    isSuccess,
+    rateLimitInfo,
   } = useWritePage();
+
+  const submitButtonDisabled = loading || wordCount < 5 || isSuccess;
 
   return (
     <div className="max-w-3xl mx-auto p-4">
@@ -37,6 +52,28 @@ export const WritePage = () => {
       <h2 className="text-xl font-semibold mb-2">{t('write.title')}</h2>
       <div className="bg-gray-100 p-4 rounded mb-4 italic text-gray-700">
         {prompt}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          {t('common.languageLevel.label')}
+        </label>
+        <Select value={languageLevel} onValueChange={handleLanguageLevelChange}>
+          <SelectTrigger className="w-48">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="beginner">
+              {t('common.languageLevel.options.beginner')}
+            </SelectItem>
+            <SelectItem value="intermediate">
+              {t('common.languageLevel.options.intermediate')}
+            </SelectItem>
+            <SelectItem value="native">
+              {t('common.languageLevel.options.native')}
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <textarea
@@ -58,9 +95,11 @@ export const WritePage = () => {
       {error && <p className="text-red-600 mt-2">{error}</p>}
 
       <button
-        className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50"
+        className={`mt-4 bg-gray-700 text-white px-4 py-2 rounded disabled:opacity-50 ${
+          submitButtonDisabled ? 'cursor-not-allowed' : ''
+        }`}
         onClick={handleSubmit}
-        disabled={loading || wordCount < 5}>
+        disabled={submitButtonDisabled}>
         {loading ? t('write.form.submitting') : t('write.form.submit')}
       </button>
 
@@ -71,6 +110,14 @@ export const WritePage = () => {
           </h2>
           <InlineDiff oldValue={inputText} newValue={correctedText} />
         </div>
+      )}
+
+      {isSuccess && data?.feedback && (
+        <WriteFeedbackSection
+          feedback={data.feedback}
+          tips={data.tips}
+          rateLimitInfo={rateLimitInfo}
+        />
       )}
     </div>
   );
