@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { URLS } from '@/constants';
+import { getRandomPrompt } from '@/services/prompts';
 
 import { PromptDisplay } from './components/prompt-display';
 import { RecorderControls } from './components/recorder-controls';
@@ -21,8 +22,6 @@ import { FeedbackSection } from './components/feedback-section';
 
 import { useUploadAudioResponse } from './hooks/use-upload-audio-response';
 import { useRecorder } from './hooks/use-recorder';
-
-import { getRandomPrompt } from './prompts';
 import { useSpeakPage } from './hooks/use-speak-page';
 
 export type LanguageLevel = 'beginner' | 'intermediate' | 'native';
@@ -78,7 +77,6 @@ export const SpeakPage = () => {
   }, [data, setFeedbackData]);
 
   const handleReset = () => {
-    console.log('Resetting state');
     resetRecording();
     setFeedbackData(null);
     resetUploadAudio();
@@ -93,30 +91,35 @@ export const SpeakPage = () => {
           onClick={() => navigate(URLS.dashboard)}
           className="mb-4">
           <ChevronLeft />
-          {t('speak.navigation.backToDashboard')}
+          {t('common.navigation.backToDashboard')}
         </Button>
       </div>
       <div className="flex flex-col gap-8 justify-between items-center">
         <PromptDisplay prompt={prompt} />
-        <Select
-          value={languageLevel}
-          onValueChange={handleLanguageLevelChange}
-          disabled={disableRecordButton}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder={t('speak.languageLevel.label')} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="beginner">
-              {t('speak.languageLevel.options.beginner')}
-            </SelectItem>
-            <SelectItem value="intermediate">
-              {t('speak.languageLevel.options.intermediate')}
-            </SelectItem>
-            <SelectItem value="expert">
-              {t('speak.languageLevel.options.expert')}
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            {t('common.languageLevel.label')}
+          </label>
+          <Select
+            value={languageLevel}
+            onValueChange={handleLanguageLevelChange}
+            disabled={disableRecordButton}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="beginner">
+                {t('common.languageLevel.options.beginner')}
+              </SelectItem>
+              <SelectItem value="intermediate">
+                {t('common.languageLevel.options.intermediate')}
+              </SelectItem>
+              <SelectItem value="native">
+                {t('common.languageLevel.options.native')}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <RecorderControls
         isDisabled={disableRecordButton}

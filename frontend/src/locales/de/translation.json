@@ -1,4 +1,133 @@
 {
-  "welcome": "Willkommen",
-  "homepage-description": "Dies ist die Startseite unserer Anwendung."
+  "welcome": "Willkommen zur Landing Page",
+  "homepage-description": "Dies ist die Startseite unserer Anwendung.",
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die Seite, die Sie suchen, wurde möglicherweise entfernt, umbenannt oder ist vorübergehend nicht verfügbar."
+  },
+  "landing": {
+    "welcome": "Willkommen bei Promptly",
+    "description": "Promptly hilft Ihnen dabei, Sprechen, Schreiben, Lesen und Hörverständnis in der Sprache Ihrer Wahl zu üben—unterstützt von KI.",
+    "getStarted": "Anmelden und lernen beginnen",
+    "subtitle-1": "Kostenlos während der frühen Zugangsphase ✨",
+    "subtitle-2": "Keine Tutoren, keine Terminplanung. Üben Sie jederzeit und überall."
+  },
+  "login": {
+    "email-label": "E-Mail",
+    "send-magic-link": "Magic Link senden",
+    "sending": "Wird gesendet...",
+    "privacy-policy": "Durch Fortfahren stimmen Sie unseren <terms>Nutzungsbedingungen</terms> und <privacy>Datenschutzrichtlinien</privacy> zu."
+  },
+  "dashboard": {
+    "title": "Promptly Dashboard",
+    "logout": "Abmelden",
+    "selectLanguage": "Sprache auswählen",
+    "languageLabel": "Wählen Sie Ihre Übungssprache:",
+    "languages": {
+      "german": "Deutsch"
+    },
+    "speaking": {
+      "title": "Sprechübung",
+      "description": "Üben Sie Ihre Sprechfähigkeiten mit KI-generierten Aufgaben."
+    },
+    "writing": {
+      "title": "Schreibübung",
+      "description": "Verbessern Sie Ihr Schreiben mit täglichen Übungseinheiten."
+    },
+    "reading": {
+      "title": "Leseübung",
+      "description": "Demnächst verfügbar..."
+    },
+    "listening": {
+      "title": "Hörübung",
+      "description": "Demnächst verfügbar..."
+    }
+  },
+  "common": {
+    "actions": {
+      "submit": "Einreichen",
+      "reset": "Zurücksetzen",
+      "back": "Zurück"
+    },
+    "loading": {
+      "submitting": "Wird eingereicht...",
+      "sending": "Wird gesendet..."
+    },
+    "auth": {
+      "sendMagicLink": "Magic Link senden"
+    },
+    "navigation": {
+      "backToDashboard": "Zurück zum Dashboard"
+    },
+    "languageLevel": {
+      "label": "Sprachniveau",
+      "options": {
+        "beginner": "Anfänger",
+        "intermediate": "Fortgeschritten",
+        "native": "Muttersprachlich"
+      }
+    }
+  },
+  "speak": {
+    "title": "Auf Deutsch sprechen",
+    "audioPlayback": {
+      "title": "Wiedergabe",
+      "noAudio": "Noch keine Aufnahme vorhanden."
+    },
+    "feedback": {
+      "title": "KI-Feedback",
+      "rateLimits": {
+        "remaining": "Verbleibende Anfragen: {{remaining}}/{{limit}}",
+        "resetsIn": "Wird zurückgesetzt in: {{time}}"
+      },
+      "transcript": {
+        "label": "Transkript:"
+      },
+      "categories": {
+        "fluency": "Flüssigkeit",
+        "grammar": "Grammatik",
+        "vocabulary": "Wortschatz",
+        "pronunciation": "Aussprache",
+        "score": "{{score}}/10"
+      }
+    }
+  },
+  "write": {
+    "title": "Auf Deutsch schreiben",
+    "form": {
+      "placeholder": "Schreiben Sie hier Ihre Antwort...",
+      "wordCount": "Wörter: {{count}}",
+      "clear": "Löschen",
+      "submit": "Zur Überprüfung einreichen",
+      "submitting": "Überprüfung läuft..."
+    },
+    "validation": {
+      "minimumWords": "Bitte schreiben Sie mindestens 5 Wörter, bevor Sie einreichen."
+    },
+    "corrections": {
+      "title": "Korrekturen:",
+      "originalText": "Ihr ursprünglicher Text",
+      "correctedText": "KI-korrigierter Text",
+      "changesHighlighted": "Änderungen hervorgehoben",
+      "legend": {
+        "title": "Legende:",
+        "removed": "Text, der korrigiert oder entfernt wurde",
+        "added": "Text, der hinzugefügt oder korrigiert wurde"
+      }
+    },
+    "feedback": {
+      "title": "KI-Feedback",
+      "categories": {
+        "grammar": "Grammatik",
+        "vocabulary": "Wortschatz",
+        "structure": "Struktur"
+      },
+      "improvements": {
+        "title": "Verbesserungstipps"
+      },
+      "tips": {
+        "title": "Zusätzliche Grammatiktipps"
+      }
+    }
+  }
 }

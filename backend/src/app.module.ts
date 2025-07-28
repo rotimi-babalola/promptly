@@ -12,6 +12,7 @@ import { SpeakModule } from './speak/speak.module';
 
 import { SupabaseAuthGuard } from './auth/supabase-auth.guard';
 import { UserThrottlerGuard } from './auth/user-throttler.guard';
+import { WriteModule } from './write/write.module';
 
 export const MAX_REQUESTS_PER_DAY = 10;
 export const THROTTLE_TTL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -39,6 +40,7 @@ const redisClient = !isTest
         ? { storage: new ThrottlerStorageRedisService(redisClient) }
         : {}),
     }),
+    WriteModule,
   ],
   controllers: [AppController],
   providers: [

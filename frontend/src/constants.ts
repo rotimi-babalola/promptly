@@ -3,6 +3,8 @@ export const URLS = {
   dashboard: '/dashboard',
   login: '/login',
   logout: '/logout',
+  notFound: '*',
   root: '/',
   speak: '/speak',
+  write: '/write',
 };
