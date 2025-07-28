@@ -32,7 +32,9 @@ export const WriteFeedbackSection = ({
   const { t } = useTranslation();
 
   return (
-    <div className="mt-6 space-y-4 border-t pt-4">
+    <div
+      className="mt-6 space-y-4 border-t pt-4"
+      data-testid="write-feedback-section">
       <h3 className="font-semibold text-lg">{t('write.feedback.title')}</h3>
 
       {rateLimitInfo && (

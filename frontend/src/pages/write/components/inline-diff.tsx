@@ -9,7 +9,7 @@ export const InlineDiff: React.FC<{ oldValue: string; newValue: string }> = ({
   const diff = diffWords(oldValue, newValue);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="inline-diff">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg overflow-hidden">
         <div className="bg-red-50 border-r border-gray-200">
           <div className="bg-red-100 px-4 py-2 border-b border-red-200">
