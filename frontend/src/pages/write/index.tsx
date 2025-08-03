@@ -77,10 +77,13 @@ export const WritePage = () => {
       </div>
 
       <textarea
-        className="w-full h-40 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className={`w-full h-40 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          loading ? 'cursor-not-allowed' : ''
+        }`}
         placeholder={t('write.form.placeholder')}
         value={inputText}
         onChange={e => setInputText(e.target.value)}
+        disabled={loading}
       />
       <div className="flex justify-between items-center mt-1 text-sm text-gray-600">
         <span>{t('write.form.wordCount', { count: wordCount })}</span>
