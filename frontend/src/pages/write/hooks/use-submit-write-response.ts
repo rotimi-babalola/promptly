@@ -48,7 +48,7 @@ export const useSubmitWriteResponse = () => {
     const token = (await supabase.auth.getSession()).data.session?.access_token;
 
     const { response, rateLimitInfo: rateLimit } = await sendRequest(
-      'http://localhost:8000/api/v1/write',
+      `${import.meta.env.VITE_API_ROOT_URL}/api/v1/write`,
       {
         method: 'POST',
         body: {
