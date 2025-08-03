@@ -26,5 +26,6 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    allowedHosts: ['promptly-frontend.onrender.com'],
   },
 } as UserConfig);
