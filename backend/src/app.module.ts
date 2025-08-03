@@ -19,10 +19,7 @@ export const THROTTLE_TTL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 const isTest = !!process.env.JEST_WORKER_ID;
 const redisClient = !isTest
-  ? new Redis({
-      host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
-    })
+  ? new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
   : null;
 
 @Module({
