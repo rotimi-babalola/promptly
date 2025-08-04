@@ -42,8 +42,8 @@ const redisClient = !isTest
   controllers: [AppController],
   providers: [
     AppService,
-    { provide: APP_GUARD, useClass: UserThrottlerGuard },
     { provide: APP_GUARD, useClass: SupabaseAuthGuard },
+    { provide: APP_GUARD, useClass: UserThrottlerGuard },
   ],
 })
 export class AppModule {}
