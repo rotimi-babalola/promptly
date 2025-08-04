@@ -12,10 +12,19 @@ export class CacheService {
   private readonly logger = new Logger(CacheService.name);
   private readonly cache = new Map<string, CacheItem>();
   private readonly DEFAULT_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+  private cleanupInterval?: NodeJS.Timeout;
 
   constructor() {
-    // Clean up expired items every 10 minutes
-    setInterval(() => this.cleanup(), 10 * 60 * 1000);
+    // Only start cleanup interval in production (not during testing)
+    if (process.env.NODE_ENV !== 'test') {
+      this.cleanupInterval = setInterval(() => this.cleanup(), 10 * 60 * 1000);
+    }
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
   }
 
   generateKey(data: string): string {

@@ -7,6 +7,7 @@ import { SpeakService } from './speak.service';
 import { Feedback } from '../langchain/speak-chain';
 import { grammarTipChain } from '../langchain/grammar-tip-chain';
 import { feedbackChain } from '../langchain/speak-chain';
+import { CacheService } from '../cache/cache.service';
 
 jest.mock('tmp-promise');
 jest.mock('../langchain/grammar-tip-chain', () => ({
@@ -54,6 +55,15 @@ describe('SpeakService', () => {
 
   const tips = [{ text: 'tip' }];
 
+  const mockCacheService = {
+    generateKey: jest.fn().mockReturnValue('test-cache-key'),
+    get: jest.fn().mockReturnValue(null),
+    set: jest.fn(),
+    delete: jest.fn(),
+    clear: jest.fn(),
+    getStats: jest.fn().mockReturnValue({ size: 0, keys: [] }),
+  };
+
   beforeEach(async () => {
     (tmp.file as jest.Mock).mockResolvedValue({
       path: 'tmp.webm',
@@ -64,6 +74,7 @@ describe('SpeakService', () => {
       providers: [
         SpeakService,
         { provide: 'OPENAI_CLIENT', useValue: mockOpenAI },
+        { provide: CacheService, useValue: mockCacheService },
       ],
     }).compile();
     service = module.get<SpeakService>(SpeakService);
