@@ -10,6 +10,7 @@ import { MessageContent } from '@langchain/core/messages';
 import { writeFeedbackChain, WriteFeedback } from '../langchain/write-chain';
 import { grammarTipChain } from '../langchain/grammar-tip-chain';
 import { LanguageLevel } from './dto/write.dto';
+import { CacheService } from '../cache/cache.service';
 
 export interface ProcessWriteResult {
   feedback: WriteFeedback;
@@ -23,7 +24,17 @@ export class WriteService {
   constructor(
     @Inject('OPENAI_CLIENT')
     private readonly openai: OpenAI,
+    private readonly cacheService: CacheService,
   ) {}
+
+  private generateCacheKey(
+    userResponse: string,
+    prompt: string,
+    languageLevel: string,
+  ): string {
+    const content = `write-${userResponse}-${prompt}-${languageLevel}`;
+    return this.cacheService.generateKey(content);
+  }
 
   async processWriting(
     userResponse: string,
@@ -37,29 +48,51 @@ export class WriteService {
         `User response length: ${userResponse.length} characters`,
       );
 
-      const [feedback, tipResult] = await Promise.all([
-        writeFeedbackChain.invoke({ userResponse, prompt, languageLevel }),
-        grammarTipChain.invoke({ transcript: userResponse }),
-      ]);
-
-      // Log the raw feedback structure for debugging
-      this.logger.debug(
-        'Raw feedback from AI:',
-        JSON.stringify(feedback, null, 2),
+      // Check cache first
+      const cacheKey = this.generateCacheKey(
+        userResponse,
+        prompt,
+        languageLevel,
       );
+      const cached = this.cacheService.get<ProcessWriteResult>(cacheKey);
+
+      if (cached) {
+        this.logger.log('Returning cached write result');
+        return cached;
+      }
+
+      // Get feedback first to determine if tips are needed
+      const feedback = await writeFeedbackChain.invoke({
+        userResponse,
+        prompt,
+        languageLevel,
+      });
 
       // Validate and provide fallback for feedback structure
       const validatedFeedback = this.validateAndFixFeedback(feedback);
 
       this.logger.log('Feedback validation completed successfully');
 
-      const tips =
-        validatedFeedback.grammar.score < 4 ||
-        validatedFeedback.vocabulary.score < 4
-          ? tipResult.content
-          : null;
+      // Only generate tips if scores are low (4 or below) to reduce API calls
+      const needsTips =
+        validatedFeedback.grammar.score <= 4 ||
+        validatedFeedback.vocabulary.score <= 4 ||
+        validatedFeedback.structure.score <= 4;
 
-      return { feedback: validatedFeedback, tips };
+      let tips: MessageContent | null = null;
+      if (needsTips) {
+        const tipResult = await grammarTipChain.invoke({
+          transcript: userResponse,
+        });
+        tips = tipResult.content;
+      }
+
+      const result = { feedback: validatedFeedback, tips };
+
+      // Cache for 30 minutes
+      this.cacheService.set(cacheKey, result, 30 * 60 * 1000);
+
+      return result;
     } catch (err) {
       this.logger.error(
         `processWriting failed for input: "${userResponse}"`,

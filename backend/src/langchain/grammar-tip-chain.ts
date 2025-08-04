@@ -21,9 +21,12 @@ Respond in natural language (not JSON).
 });
 
 const model = new ChatOpenAI({
-  modelName: 'gpt-4',
+  modelName: 'gpt-3.5-turbo',
   temperature: 0.3,
   openAIApiKey: process.env.OPENAI_API_KEY,
+  maxTokens: 500,
+  timeout: 20000,
+  maxRetries: 1,
 });
 
 export const grammarTipChain = RunnableSequence.from([grammarPrompt, model]);

@@ -80,9 +80,12 @@ Requirements:
 });
 
 const model = new ChatOpenAI({
-  modelName: 'gpt-4',
+  modelName: 'gpt-3.5-turbo',
   temperature: 0.3,
   openAIApiKey: process.env.OPENAI_API_KEY,
+  maxTokens: 1200,
+  timeout: 25000,
+  maxRetries: 1,
 });
 
 export const writeFeedbackChain = RunnableSequence.from([

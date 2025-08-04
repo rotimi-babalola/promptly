@@ -6,6 +6,7 @@ import { LanguageLevel } from './dto/write.dto';
 import { WriteFeedback } from '../langchain/write-chain';
 import { writeFeedbackChain } from '../langchain/write-chain';
 import { grammarTipChain } from '../langchain/grammar-tip-chain';
+import { CacheService } from '../cache/cache.service';
 
 // Mock the langchain modules
 jest.mock('../langchain/write-chain', () => ({
@@ -56,6 +57,15 @@ describe('WriteService', () => {
       },
     };
 
+    const mockCacheService = {
+      generateKey: jest.fn().mockReturnValue('test-cache-key'),
+      get: jest.fn().mockReturnValue(null),
+      set: jest.fn(),
+      delete: jest.fn(),
+      clear: jest.fn(),
+      getStats: jest.fn().mockReturnValue({ size: 0, keys: [] }),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         WriteService,
@@ -64,6 +74,7 @@ describe('WriteService', () => {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           useValue: mockOpenAI,
         },
+        { provide: CacheService, useValue: mockCacheService },
       ],
     }).compile();
 
@@ -106,15 +117,11 @@ describe('WriteService', () => {
 
       const mockWriteFeedbackChainInvoke =
         mockWriteFeedbackChain.invoke as jest.Mock;
-      const mockGrammarTipChainInvoke = mockGrammarTipChain.invoke as jest.Mock;
 
       expect(mockWriteFeedbackChainInvoke).toHaveBeenCalledWith({
         userResponse,
         prompt,
         languageLevel,
-      });
-      expect(mockGrammarTipChainInvoke).toHaveBeenCalledWith({
-        transcript: userResponse,
       });
     });
 

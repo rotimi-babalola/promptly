@@ -4,11 +4,13 @@ import OpenAI from 'openai';
 
 import { SpeakController } from './speak.controller';
 import { SpeakService } from './speak.service';
+import { CacheService } from '../cache/cache.service';
 
 @Module({
   controllers: [SpeakController],
   providers: [
     SpeakService,
+    CacheService,
     {
       provide: 'OPENAI_CLIENT',
       useFactory: (configService: ConfigService) => {
@@ -16,7 +18,11 @@ import { SpeakService } from './speak.service';
         if (!apiKey) {
           throw new Error('Missing OPENAI_API_KEY');
         }
-        return new OpenAI({ apiKey });
+        return new OpenAI({
+          apiKey,
+          timeout: 30000,
+          maxRetries: 1,
+        });
       },
       inject: [ConfigService],
     },
