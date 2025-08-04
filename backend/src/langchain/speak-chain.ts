@@ -61,9 +61,12 @@ If you cannot evaluate a criterion, set the score to 0 and provide a comment exp
 });
 
 const model = new ChatOpenAI({
-  modelName: 'gpt-4',
+  modelName: 'gpt-3.5-turbo',
   temperature: 0.3,
   openAIApiKey: process.env.OPENAI_API_KEY,
+  maxTokens: 1000,
+  timeout: 25000,
+  maxRetries: 1,
 });
 
 export const feedbackChain = RunnableSequence.from([
