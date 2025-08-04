@@ -1,26 +1,31 @@
 # Promptly
 
-Promptly is a full-stack application designed to streamline development workflows. It features a React + TypeScript + Vite frontend and a NestJS backend, all containerized with Docker for easy setup and deployment.
+Promptly is an AI-powered language learning platform that helps users practice German through interactive speaking and writing exercises. The application provides real-time feedback on pronunciation, grammar, vocabulary, and structure using advanced language models.
 
 ## Features
 
-### Frontend
+### Language Learning Capabilities
 
-- Built with React, TypeScript, and Vite.
-- Implements React Router for navigation.
-- Organized with alias paths for cleaner imports.
-- Includes ESLint for code quality and Prettier for consistent formatting.
+- **Speaking Practice**: Record audio responses to prompts and receive AI feedback on fluency, grammar, vocabulary, and pronunciation
+- **Writing Practice**: Submit written responses and get detailed corrections, grammar feedback, and improvement suggestions
+- **Adaptive Learning**: Choose from beginner, intermediate, or native difficulty levels
+- **Real-time Feedback**: Powered by OpenAI's GPT-4 and Whisper models for accurate language assessment
+- **Audio Transcription**: Automatic speech-to-text conversion for speaking exercises
 
-### Backend
+### Technical Features
 
-- Built with NestJS, a progressive Node.js framework.
-- Modular architecture for scalability.
-- Includes unit and end-to-end testing with Jest and Supertest.
+- **Frontend**: Built with React, TypeScript, and Vite with modern UI components
+- **Backend**: NestJS-powered API with LangChain integration for AI processing
+- **Authentication**: Secure user authentication via Supabase
+- **Rate Limiting**: Built-in throttling to manage API usage
+- **Internationalization**: Multi-language support with i18next
+- **Audio Processing**: Browser-based audio recording and playback
 
 ### Docker
 
-- Dockerized services for both frontend and backend.
-- Uses `docker-compose` for multi-container orchestration.
+- Fully containerized application with Docker Compose
+- Separate containers for frontend and backend services
+- Easy deployment and development setup
 
 ---
 
@@ -28,26 +33,41 @@ Promptly is a full-stack application designed to streamline development workflow
 
 ```
 .
-├── backend/       # NestJS backend
-│   ├── src/       # Source code
-│   ├── test/      # Unit and e2e tests
-│   ├── Dockerfile # Backend Docker configuration
+├── backend/           # NestJS API server
+│   ├── src/
+│   │   ├── auth/      # Supabase authentication guards
+│   │   ├── langchain/ # AI chains for feedback generation
+│   │   ├── speak/     # Speaking practice endpoints
+│   │   ├── write/     # Writing practice endpoints
+│   │   └── ...
+│   ├── test/          # Unit and e2e tests
+│   ├── Dockerfile     # Backend Docker configuration
 │   └── ...
-├── frontend/      # React + Vite frontend
-│   ├── src/       # Source code
-│   ├── public/    # Static assets
-│   ├── Dockerfile # Frontend Docker configuration
+├── frontend/          # React + Vite client
+│   ├── src/
+│   │   ├── pages/     # Main application pages
+│   │   │   ├── speak/ # Speaking practice interface
+│   │   │   ├── write/ # Writing practice interface
+│   │   │   └── ...
+│   │   ├── components/# Reusable UI components
+│   │   ├── hooks/     # Custom React hooks
+│   │   ├── services/  # API communication
+│   │   └── locales/   # Internationalization files
+│   ├── public/        # Static assets
+│   ├── Dockerfile     # Frontend Docker configuration
 │   └── ...
-├── docker-compose.yml # Docker Compose configuration
-└── README.md      # Project documentation
+├── docker-compose.yml # Multi-container orchestration
+└── README.md          # Project documentation
 ```
 
 ---
 
 ## Prerequisites
 
-- [Docker](https://www.docker.com/)
-- [Node.js](https://nodejs.org/) (optional for local development)
+- [Docker](https://www.docker.com/) and Docker Compose
+- [Node.js](https://nodejs.org/) (v18+ for local development)
+- OpenAI API key for AI-powered feedback
+- Supabase project for authentication (optional for local development)
 
 ---
 
@@ -60,21 +80,31 @@ Promptly is a full-stack application designed to streamline development workflow
    cd promptly
    ```
 
-2. Build and start the application using Docker Compose:
+2. Set up environment variables:
+
+   ```bash
+   # Backend environment variables
+   cp backend/.env.example backend/.env
+   # Add your OpenAI API key and other required variables
+   ```
+
+3. Build and start the application using Docker Compose:
 
    ```bash
    docker-compose up --build
    ```
 
-3. Access the application:
+4. Access the application:
    - Frontend: [http://localhost:5173](http://localhost:5173)
-   - Backend: [http://localhost:8000](http://localhost:8000)
+   - Backend API: [http://localhost:8000](http://localhost:8000)
+
+The application will be ready for language learning practice once both services are running!
 
 ---
 
 ## Development
 
-### Frontend
+### Frontend (Language Learning Interface)
 
 To run the frontend locally:
 
@@ -95,7 +125,14 @@ To run the frontend locally:
    npm run dev
    ```
 
-### Backend
+The frontend includes:
+
+- Speaking practice page with audio recording
+- Writing practice page with text input
+- Real-time feedback display
+- Language level selection
+
+### Backend (AI Processing API)
 
 To run the backend locally:
 
@@ -111,41 +148,178 @@ To run the backend locally:
    npm install
    ```
 
-3. Start the development server:
+3. Set up environment variables (copy `.env.example` to `.env`)
+
+4. Start the development server:
    ```bash
    npm run start:dev
    ```
+
+The backend provides:
+
+- `/speak` endpoints for audio processing and feedback
+- `/write` endpoints for text analysis and corrections
+- LangChain integration for AI-powered language assessment
 
 ---
 
 ## Testing
 
-### Frontend
+### Frontend Tests
 
-Run ESLint to check for linting issues:
+Run linting and tests for the language learning interface:
 
 ```bash
-npm run lint
+cd frontend
+npm run lint     # ESLint code quality checks
+npm run test     # Vitest unit tests for components and hooks
 ```
 
-### Backend
+### Backend Tests
 
-Run unit tests:
+Run comprehensive tests for the AI processing backend:
 
 ```bash
-npm run test
+cd backend
+npm run test     # Unit tests for language processing services
+npm run test:e2e # End-to-end API tests
+npm run lint     # ESLint code quality checks
 ```
 
-Run end-to-end tests:
+The test suite covers:
+
+- Audio processing and transcription
+- AI feedback generation
+- Language level assessment
+- Rate limiting functionality
+
+---
+
+## Usage
+
+### Speaking Practice
+
+1. Navigate to the Speaking Practice page
+2. Select your language level (Beginner/Intermediate/Native)
+3. Read the displayed prompt
+4. Record your audio response
+5. Submit for AI analysis
+6. Review feedback on fluency, grammar, vocabulary, and pronunciation
+
+### Writing Practice
+
+1. Navigate to the Writing Practice page
+2. Select your language level
+3. Read the writing prompt
+4. Type your response (minimum 5 words)
+5. Submit for AI analysis
+6. Review corrections, grammar feedback, and improvement suggestions
+
+---
+
+## Environment Variables
+
+### Backend Configuration
 
 ```bash
-npm run test:e2e
+# Required
+OPENAI_API_KEY=your_openai_api_key_here
+
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Server configuration
+PORT=8000
+```
+
+### Frontend Configuration
+
+```bash
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# API endpoint
+VITE_API_URL=http://localhost:8000
 ```
 
 ---
 
 ## Deployment
 
-For production deployment, ensure the Docker images are built and pushed to a container registry. Update the `docker-compose.yml` file as needed for production configurations.
+### Production Deployment
+
+1. Ensure environment variables are properly configured for production
+2. Build Docker images:
+
+   ```bash
+   docker-compose build
+   ```
+
+3. Deploy using your preferred container orchestration platform (Docker Swarm, Kubernetes, etc.)
+
+### Environment-Specific Notes
+
+- Set `NODE_ENV=production` for the backend
+- Configure CORS settings for your production domain
+- Set up proper SSL/TLS certificates
+- Configure rate limiting for production traffic
+- Ensure OpenAI API key has sufficient quota for expected usage
 
 ---
+
+## Technologies Used
+
+### AI & Language Processing
+
+- **OpenAI GPT-4**: Advanced language understanding and feedback generation
+- **OpenAI Whisper**: Accurate speech-to-text transcription
+- **LangChain**: Framework for building AI-powered language applications
+
+### Frontend
+
+- **React 18**: Modern user interface framework
+- **TypeScript**: Type-safe development
+- **Vite**: Fast development and build tooling
+- **Tailwind CSS**: Utility-first styling
+- **Radix UI**: Accessible component library
+- **React Query**: Server state management
+- **i18next**: Internationalization
+
+### Backend
+
+- **NestJS**: Progressive Node.js framework
+- **Express**: HTTP server framework
+- **Supabase**: Authentication and database
+- **Redis**: Rate limiting and caching
+- **Jest**: Comprehensive testing framework
+
+### DevOps
+
+- **Docker**: Containerization
+- **Docker Compose**: Multi-container orchestration
+- **ESLint**: Code quality and consistency
+- **Prettier**: Code formatting
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+Please ensure your code follows the project's coding standards and includes appropriate tests.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## Support
+
+If you encounter any issues or have questions about using Promptly for language learning, please open an issue on GitHub
