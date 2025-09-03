@@ -88,10 +88,10 @@ export const WritePage = () => {
       <div className="flex justify-between items-center mt-1 text-sm text-gray-600">
         <span>{t('write.form.wordCount', { count: wordCount })}</span>
         <button
-          className="text-gray-500 hover:text-gray-700"
+          className="text-gray-500 hover:text-gray-700 cursor-pointer"
           onClick={handleClear}
           disabled={loading && !inputText}>
-          {t('write.form.clear')}
+          {t('common.actions.reset')}
         </button>
       </div>
 
