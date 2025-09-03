@@ -141,7 +141,7 @@ describe('WritePage', () => {
       screen.getByPlaceholderText('write.form.placeholder'),
     ).toBeInTheDocument();
     expect(screen.getByText('write.form.submit')).toBeInTheDocument();
-    expect(screen.getByText('write.form.clear')).toBeInTheDocument();
+    expect(screen.getByText('common.actions.reset')).toBeInTheDocument();
   });
 
   it('displays word count correctly', () => {
@@ -163,7 +163,7 @@ describe('WritePage', () => {
   it('calls handleClear when clear button is clicked', () => {
     render(<WritePage />);
 
-    const clearButton = screen.getByText('write.form.clear');
+    const clearButton = screen.getByText('common.actions.reset');
     fireEvent.click(clearButton);
 
     expect(mockUseWritePage.handleClear).toHaveBeenCalled();
@@ -305,7 +305,7 @@ describe('WritePage', () => {
 
     render(<WritePage />);
 
-    const clearButton = screen.getByText('write.form.clear');
+    const clearButton = screen.getByText('common.actions.reset');
     expect(clearButton).toBeDisabled();
   });
 
@@ -315,7 +315,7 @@ describe('WritePage', () => {
 
     render(<WritePage />);
 
-    const clearButton = screen.getByText('write.form.clear');
+    const clearButton = screen.getByText('common.actions.reset');
     expect(clearButton).not.toBeDisabled();
   });
 
