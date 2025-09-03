@@ -97,7 +97,6 @@
     "form": {
       "placeholder": "Write your response here...",
       "wordCount": "Words: {{count}}",
-      "clear": "Clear",
       "submit": "Submit for Feedback",
       "submitting": "Checking..."
     },
