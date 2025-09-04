@@ -1,3 +1,4 @@
+import { getAudioFormat } from '@/lib/getAudioFormat';
 import { useEffect, useRef, useState } from 'react';
 
 export function useRecorder() {
@@ -27,7 +28,11 @@ export function useRecorder() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
       audioChunksRef.current = [];
-      const mediaRecorder = new MediaRecorder(stream);
+      const mimeType = getAudioFormat();
+      const options: MediaRecorderOptions | undefined = mimeType
+        ? { mimeType }
+        : undefined;
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = event => {
@@ -35,8 +40,11 @@ export function useRecorder() {
       };
 
       mediaRecorder.onstop = () => {
+        // Use the recorder's actual mimeType or fall back to the first chunk's type
+        const resolvedType =
+          mediaRecorder.mimeType || audioChunksRef.current[0]?.type || '';
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: 'audio/webm',
+          type: resolvedType,
         });
         setAudioBlob(audioBlob);
         setAudioUrl(URL.createObjectURL(audioBlob));

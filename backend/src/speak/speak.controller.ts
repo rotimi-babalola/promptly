@@ -30,7 +30,9 @@ export class SpeakController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: MAX_FILE_SIZE }),
-          new FileTypeValidator({ fileType: '.(webm)' }),
+          // Accept common audio containers across browsers
+          // Chrome/Edge: webm, Firefox: ogg, Safari: mp4/m4a, fallback: wav
+          new FileTypeValidator({ fileType: '.(webm|ogg|mp4|m4a|wav)' }),
         ],
       }),
     )
