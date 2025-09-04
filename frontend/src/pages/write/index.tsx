@@ -37,6 +37,7 @@ export const WritePage = () => {
   } = useWritePage();
 
   const submitButtonDisabled = loading || wordCount < 5 || isSuccess;
+  const textAreaDisabled = loading || isSuccess;
 
   return (
     <div className="max-w-3xl mx-auto p-4">
@@ -78,12 +79,12 @@ export const WritePage = () => {
 
       <textarea
         className={`w-full h-40 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-          loading ? 'cursor-not-allowed' : ''
+          textAreaDisabled ? 'cursor-not-allowed' : ''
         }`}
         placeholder={t('write.form.placeholder')}
         value={inputText}
         onChange={e => setInputText(e.target.value)}
-        disabled={loading}
+        disabled={textAreaDisabled}
       />
       <div className="flex justify-between items-center mt-1 text-sm text-gray-600">
         <span>{t('write.form.wordCount', { count: wordCount })}</span>
