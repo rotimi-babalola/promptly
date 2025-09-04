@@ -9,8 +9,7 @@ export const AuthCallback = () => {
 
   useEffect(() => {
     const handleAuth = async () => {
-      const { error, data } = await supabase.auth.getSession();
-      console.log('Auth callback data:', data);
+      const { error } = await supabase.auth.getSession();
 
       if (error) {
         console.error('Auth callback error:', error.message);

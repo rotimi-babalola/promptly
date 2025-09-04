@@ -49,7 +49,11 @@ export const useUploadAudioResponse = () => {
     languageLevel,
   }: UploadAudioResponseParams): Promise<UploadAudioResponseResult> => {
     const formData = new FormData();
-    formData.append('file', audioBlob, 'response.wav');
+    // Derive a sensible file extension from the blob type
+    const type = audioBlob.type || '';
+    const knownExts = ['webm', 'ogg', 'mp4', 'wav'] as const;
+    const extension = knownExts.find((ext) => type.includes(ext)) ?? 'webm';
+    formData.append('file', audioBlob, `response.${extension}`);
     formData.append('prompt', prompt);
     formData.append('languageLevel', languageLevel);
 
